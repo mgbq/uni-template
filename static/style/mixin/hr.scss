@@ -1,0 +1,26 @@
+// 添加分割线  参数：位置,间隔
+@mixin hr($direction: top, $margin: 0){
+    position: absolute;
+    z-index: 3;
+    @if ($direction == top) { // 右三角
+        top: 0;
+        left: $margin;
+        right: $margin;
+    } @else if ($direction == bottom){
+        bottom: 0;
+        left: $margin;
+        right: $margin;
+    } @else if ($direction == left){
+        top: $margin;
+        bottom: $margin;
+        left: 0;
+    } @else if ($direction == right){
+        top: $margin;
+        bottom: $margin;
+        right: 0;
+    }
+    height: 1upx;
+    content: '';
+    transform: scaleY(.5);
+    background-color: #c8c7cc;
+}

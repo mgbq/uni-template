@@ -1,0 +1,16 @@
+// 文本格式化超出省略号  参数：宽度，单行/多行
+@mixin text-overflow($width: null, $row: 1){
+    @if $width != null{
+        width: $width;
+    }
+    @if $row == 1{
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        overflow: hidden;
+    } @else {
+        display: -webkit-box;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: $row;
+        overflow: hidden;
+    }
+}

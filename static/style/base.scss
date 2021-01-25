@@ -1,0 +1,90 @@
+@import './mixin/flex.scss';                // flex(主轴,交叉轴,方向,换行,多轴线对齐) / flex-self(对齐,(布满||固定),顺序)
+@import './mixin/text-overflow.scss';       // 文本格式化超出省略号  参数：宽度,单行/多行
+@import './mixin/position-absolute.scss';   // 绝对定位  参数：上,右,下,左
+@import './mixin/triangle.scss';            // 画三角形  参数：宽度,朝向,颜色
+@import './mixin/hr.scss';                  // 添加分割线  参数：位置,间隔
+@import './mixin/price-before.scss';        // 价格¥前加
+
+/*每个页面公共css */
+page {
+    min-height: 100%;
+    background-color: #f7f7f7;
+}
+
+/* ==================
+	          flex布局(colorui里面也有相关基础样式)
+	 ==================== */
+	/* x水平排列*/
+	.x-f {
+		display: flex;
+		align-items: center;
+	}
+
+	/*x两端且水平居中*/
+	.x-bc {
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+	}
+
+	/*x平分且水平居中*/
+	.x-ac {
+		display: flex;
+		justify-content: space-around;
+		align-items: center;
+	}
+
+	/*x水平靠上对齐*/
+	.x-start {
+		display: flex;
+		align-items: flex-start;
+	}
+
+	/*x水平靠下对齐*/
+	.x-end {
+		display: flex;
+		align-items: flex-end;
+	}
+
+	/*上下左右居中*/
+	.x-c {
+		display: flex;
+		justify-content: center;
+		align-items: center;
+	}
+
+	/*y竖直靠左*/
+	.y-start {
+		display: flex;
+		flex-direction: column;
+		align-items: flex-start;
+	}
+
+	/*y竖直靠右*/
+	.y-end {
+		display: flex;
+		flex-direction: column;
+		align-items: flex-end;
+	}
+
+	/*y竖直居中*/
+	.y-f {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+	}
+
+	/* y竖直两端*/
+	.y-b {
+		display: flex;
+		flex-direction: column;
+		justify-content: space-between;
+	}
+
+	/*y竖直两端居中*/
+	.y-bc {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		justify-content: space-between;
+	}

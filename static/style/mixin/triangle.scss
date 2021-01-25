@@ -1,0 +1,16 @@
+// 画三角形  参数：宽度,朝向,颜色
+@mixin triangle($width: 10px, $direction: top, $color: $uni-color-main) {
+  border: $width solid transparent;
+  @if ($direction == top) { // 上三角
+    border-bottom-color: $color;
+  }
+  @if ($direction == bottom) { // 下三角
+    border-top-color: $color;
+  }
+  @if ($direction == left) { // 左三角
+    border-right-color: $color;
+  }
+  @if ($direction == right) { // 右三角
+    border-left-color: $color;
+  }
+}
