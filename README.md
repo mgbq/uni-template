@@ -1,7 +1,3 @@
-# uni-template
-基于uni-app编写的登录模板，request请求封装，全局路由拦截,也可作为项目基础模板使用
-
-
 ## 前言
 做一个新的项目就需要常用的代码，比如
 
@@ -13,6 +9,7 @@
 - flex常用布局css,
 - 配置分包
 - utils常用工具函数
+- 全局过滤器filters
 - 配置Vuex(store)
 - 等等
 
@@ -75,7 +72,13 @@ methods: {
 		
 ```
 
-## [源码下载](https://ext.dcloud.net.cn/plugin?id=4008)
+## 全局过滤器filters
+main.js引入filters，使用如下
+```javascript
+{{shop.shopAddress|autoAddPoints}}
+```
+
+## [源码下载](https://github.com/mgbq/uni-template)
 ## 后面持续更新。。。。
 
 如果你导入源码或者学习过程中有任何问题，都可以加我qq：392716797。大家一起学习，一起进步。 
