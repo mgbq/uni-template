@@ -4,6 +4,10 @@ import store from '@/common/store'
 import * as $apis from './apis/index.js'
 import router from './common/router.js'
 import $mUtils from './common/utils.js'
+import * as filter from '@/common/filter.js'; // global filter
+Object.keys(filter).forEach(item => {
+	Vue.filter(item, filter[item]);
+});
 // 引入全局uView
 import uView from 'uview-ui';
 Vue.use(uView);
@@ -17,6 +21,6 @@ App.mpType = 'app'
 
 const app = new Vue({
 	store,
-    ...App
+	...App
 })
 app.$mount()
