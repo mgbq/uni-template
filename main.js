@@ -15,6 +15,7 @@ Vue.config.productionTip = false;
 Vue.prototype.$apis = $apis;
 Vue.prototype.$store = store;
 Vue.prototype.$mUtils = $mUtils;
+Vue.prototype.$bus = new Vue() // event Bus 用于无关系组件间的通信。
 
 
 App.mpType = 'app'
