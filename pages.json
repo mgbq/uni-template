@@ -10,6 +10,7 @@
 	"pages": [ //pages数组中第一项表示应用启动页，参考：https://uniapp.dcloud.io/collocation/pages
 		{
 			"path": "pages/index/index",
+			"aliasPath": "/", //对于h5端你必须在首页加上aliasPath并设置为/
 			"style": {
 				"navigationBarTitleText": "首页"
 			}
@@ -20,7 +21,34 @@
 				"navigationBarTitleText": "我的"
 			}
 		}
-	],
+	    ,{
+            "path" : "pages/me/coupon/index",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "优惠券",
+                "enablePullDownRefresh": false
+            }
+            
+        }
+        ,{
+            "path" : "pages/me/seach/index",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "搜索",
+                "enablePullDownRefresh": false
+            }
+            
+        }
+        ,{
+            "path" : "pages/me/listTitle/index",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "",
+                "enablePullDownRefresh": false
+            }
+            
+        }
+    ],
 	"subPackages": [{
 			"root": "pages/index/sub",
 			"pages": []
@@ -49,8 +77,7 @@
 		"navigationBarTextStyle": "black",
 		"navigationBarTitleText": "通用模板",
 		"navigationBarBackgroundColor": "#F8F8F8",
-		"backgroundColor": "#F8F8F8",
-		"navigationStyle": "custom"
+		"backgroundColor": "#F8F8F8"
 	},
 	"tabBar": {
 		"color": "#7A7E83",

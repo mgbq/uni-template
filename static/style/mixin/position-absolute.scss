@@ -1,16 +1,16 @@
 // 绝对定位  参数：上,右,下,左
 @mixin position-absolute($top: null, $right: null, $bottom: null, $left: null) {
   position: absolute;
-  @if ($left!="" && $left!=null) {
+  @if ($left!="" and $left!=null) {
     left: $left;
   }
-  @if ($right!="" && $right!=null) {
+  @if ($right!="" and $right!=null) {
     right: $right;
   }
-  @if ($top!="" && $top!=null) {
+  @if ($top!="" and $top!=null) {
     top: $top;
   }
-  @if ($bottom!="" && $bottom!=null) {
+  @if ($bottom!="" and $bottom!=null) {
     bottom: $bottom;
   }
 }

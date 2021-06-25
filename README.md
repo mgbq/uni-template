@@ -1,3 +1,7 @@
+# uni-template
+基于uni-app编写的登录模板，request请求封装，全局路由拦截,也可作为项目基础模板使用
+
+
 ## 前言
 做一个新的项目就需要常用的代码，比如
 
@@ -9,16 +13,14 @@
 - flex常用布局css,
 - 配置分包
 - utils常用工具函数
-- 全局过滤器filters
 - 配置Vuex(store)
-- 无关系组件间的通信。
 - 等等
 
 为了提高自己的效率（说白了有点懒）决定把这些作为基础模板，下次做新项目直接用就行了
 
 ## 效果图
 ![在这里插入图片描述](https://img-blog.csdnimg.cn/20210125164611125.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzMyMzQwODc3,size_16,color_FFFFFF,t_70#pic_center)
-## 1、全局路由守卫
+## 全局路由守卫
 
 #####  (1) 路由拦截
 [uni-simple-router](https://hhyang.cn/) 路由、拦截、最优雅的解决方案
@@ -27,16 +29,16 @@
 通过 vue.config.js 配合[uni-read-pages](https://github.com/SilurianYang/uni-read-pages)，可以随心所欲的读取 pages.json 下的所有配置
 
 
-## 2、Request封装
+## Request封装
  适用于一项目多域名请求、七牛云图片上传、本地服务器图片上传、支持 Promise.
 
-## 3、api集中管理
+## api集中管理
 api集中管理； 为简化逻辑代码量整洁的原则，像调用函数一样调用api，做到代码分离，在apis目录统一创建api函数，并且封装接口返回数据类型校验的方法，挂载到vue原型中，页面通过`this.$apis.apiName()`调用
 
-## 4、分包
+## 分包
 sub目录分包管理 由于微信小程序的限制，上传发布机制总包大小不能大于2m，所以项目若超出该限制，要在page.json中做分包处理，分包处理的配置与pages目录保持一致
 
-## 5、配置vuex
+## 配置vuex
 不需要引入每个子store模块
 
 ```javascript
@@ -73,39 +75,7 @@ methods: {
 		
 ```
 
-## 6、全局过滤器filters
-main.js引入filters，使用如下
-```javascript
-{{shop.shopAddress|autoAddPoints}}
-```
-
-## 7、无关系组件间的通信=>事件车
-> 事件车的基本原理就是在本项目Vue的原型对象里新生成一个Vue对象专门用来负责无关系，跨级组件间的通信
-
-main.js声明事件bus
-```javascript
-Vue.prototype.$bus = new Vue() // event Bus 用于无关系组件间的通信。
-```
-A组件 监听($on) 
-
-```javascript
-// onload 里面
- this.$bus.$on('updateChecked', this.updateChecked)
-
-// methods 里面
-updateChecked(index){
- 	console.log('这里就拿到了跨级组件的index',index)
- }
-```
-B组件 触发($emit)
-> B组件触发A组件的updateChecked 传index值给A组件 
-```javascript
- this.$bus.$emit('updateChecked', index);
-```
-
-
-## [源码下载](https://github.com/mgbq/uni-template)
-
+## [源码下载](https://ext.dcloud.net.cn/plugin?id=4008)
 ## 后面持续更新。。。。
 
 如果你导入源码或者学习过程中有任何问题，都可以加我qq：392716797。大家一起学习，一起进步。 
@@ -115,7 +85,7 @@ B组件 触发($emit)
 
 [反编译获取任何微信小程序源码——看这篇就够了](https://blog.csdn.net/qq_32340877/article/details/110993362) 
 
-[零基础搭建获利的美团饿了么优惠券CPS小程序(附源码)](https://blog.csdn.net/qq_32340877/article/details/113478901)
+[抽签小程序，妈妈再也不用担心谁洗碗（分配任务）了，so easy](https://blog.csdn.net/qq_32340877/article/details/105540569)
 
 [5分钟实现微信云小程序支付功能（含源码）](https://blog.csdn.net/qq_32340877/article/details/111595124)
 

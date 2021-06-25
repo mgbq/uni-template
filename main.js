@@ -3,6 +3,7 @@ import App from './App'
 import store from '@/common/store'
 import * as $apis from './apis/index.js'
 import router from './common/router.js'
+import { RouterMount } from 'uni-simple-router'
 import $mUtils from './common/utils.js'
 import * as filter from '@/common/filter.js'; // global filter
 Object.keys(filter).forEach(item => {
@@ -17,11 +18,19 @@ Vue.prototype.$store = store;
 Vue.prototype.$mUtils = $mUtils;
 Vue.prototype.$bus = new Vue() // event Bus 用于无关系组件间的通信。
 
-
 App.mpType = 'app'
+
 
 const app = new Vue({
 	store,
 	...App
 })
-app.$mount()
+
+// #ifdef H5
+RouterMount(app, router, '#app')
+// #endif
+
+// #ifndef H5
+// 为了兼容小程序及app端必须这样写才有效果
+app.$mount();
+// #endif
