@@ -1,7 +1,7 @@
 <template>
 	<view>
 		<view class="bg-white padding">
-			<view class="text-xl text-center">我的
+			<view class="text-xl text-center">这是我的
 			</view>
 		</view>
 	</view>

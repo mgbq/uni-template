@@ -1,5 +1,5 @@
 // 用户数据模块
-import router from '@/common/router.js'
+import {router} from '@/common/router.js'
 const TOKEN = uni.getStorageSync("token") || "";
 const OPENID = uni.getStorageSync("openId") || "";
 const USER_INFO = uni.getStorageSync("userInfo") || {};
@@ -20,7 +20,7 @@ export const actions = {
 	}, info) {
 		commit("SET_TOKEN", "");
 		router.push({
-			path: 'pages/me/sub/login'
+			path: 'pages/login/login'
 		});
 	}
 }

@@ -2,77 +2,66 @@
 	"easycom": { //easycom,按需自动注册组件。原则上可以把所有页面引入组件方法删掉，会自动引入。
 		"autoscan": true,
 		"custom": {
-			"^u-(.*)": "@/static/uview-ui/components/u-$1/u-$1.vue",
+			"^u-(.*)": "@/uview-ui/components/u-$1/u-$1.vue",
 			"^uni-(.*)": "@/components/uni-$1/uni-$1.vue",
 			"^nx-(.*)": "@/components/nx-$1/nx-$1.vue"
 		}
 	},
 	"pages": [ //pages数组中第一项表示应用启动页，参考：https://uniapp.dcloud.io/collocation/pages
 		{
-			"path": "pages/index/index",
+			"path": "pages/login/login",
 			"aliasPath": "/", //对于h5端你必须在首页加上aliasPath并设置为/
+			"style": {
+				"navigationBarTitleText": "登录",
+				"navigationBarBackgroundColor": "#FFFFFF"
+			}
+		},
+		{
+			"path": "pages/login/reg",
+			"style": {
+				"navigationBarTitleText": "注册",
+				"navigationBarBackgroundColor": "#FFFFFF"
+			}
+		},
+		{
+			"path": "pages/login/forget",
+			"style": {
+				"navigationBarTitleText": "忘记密码",
+				"navigationBarBackgroundColor": "#FFFFFF"
+			}
+		},
+		{
+			"path": "pages/login/agreement",
+			"style": {
+				"navigationBarTitleText": "用户协议"
+			}
+		},
+		{
+			"path": "pages/tabbar/home",
 			"style": {
 				"navigationBarTitleText": "首页"
 			}
 		},
 		{
-			"path": "pages/me/index",
+			"path": "pages/tabbar/me",
 			"style": {
 				"navigationBarTitleText": "我的"
 			}
 		}
-	    ,{
-            "path" : "pages/me/coupon/index",
-            "style" :                                                                                    
-            {
-                "navigationBarTitleText": "优惠券",
-                "enablePullDownRefresh": false
-            }
-            
-        }
-        ,{
-            "path" : "pages/me/seach/index",
-            "style" :                                                                                    
-            {
-                "navigationBarTitleText": "搜索",
-                "enablePullDownRefresh": false
-            }
-            
-        }
-        ,{
-            "path" : "pages/me/listTitle/index",
-            "style" :                                                                                    
-            {
-                "navigationBarTitleText": "",
-                "enablePullDownRefresh": false
-            }
-            
-        }
-    ],
-	"subPackages": [{
-			"root": "pages/index/sub",
-			"pages": []
-		},
-		{
-			"root": "pages/me/sub",
-			"pages": [{
-					"path": "login",
-					"style": {
-						"navigationBarTitleText": "登录"
-					}
-				},
-				{
-					"path": "register",
-					"style": {
-						"navigationBarTitleText": "注册"
-					}
-				}
-
-			]
-		}
-
-
 	],
+	"subPackages": [
+		{
+			"root": "pages/public",
+			"pages": [{
+				"path": "404",
+				"name": "404",
+				"style": {
+					"navigationBarTitleText": "页面不存在"
+				}
+			}]
+		}
+	],
+
 	"globalStyle": {
 		"navigationBarTextStyle": "black",
 		"navigationBarTitleText": "通用模板",
@@ -85,14 +74,14 @@
 		"borderStyle": "black",
 		"backgroundColor": "#F8F8F8",
 		"list": [{
-				"pagePath": "pages/index/index",
+				"pagePath": "pages/tabbar/home",
 				"iconPath": "static/images/tabbar/tab_home_01.png",
 				"selectedIconPath": "static/images/tabbar/tab_home_02.png",
 				"text": "首页"
 			},
 
 			{
-				"pagePath": "pages/me/index",
+				"pagePath": "pages/tabbar/me",
 				"iconPath": "static/images/tabbar/tab_user_01.png",
 				"selectedIconPath": "static/images/tabbar/tab_user_02.png",
 				"text": "我的"
@@ -101,17 +90,12 @@
 	},
 	"condition": { //模式配置，仅开发期间生效
 		"current": 0, //当前激活的模式(list 的索引项)
-		"list": [{
-				"name": "me页面", //模式名称
-				"path": "pages/me/index", //启动页面，必选
-				"query": "" //启动参数，在页面的onLoad函数里面得到
-			},
-
-			{
-				"name": "登录页面", //模式名称
-				"path": "pages/me/sub/login", //启动页面，必选
-				"query": "" //启动参数，在页面的onLoad函数里面得到
-			}
+		"list": [
+			// {
+			// 	"name": "登录页面", //模式名称
+			// 	"path": "pages/login/login", //启动页面，必选
+			// 	"query": "" //启动参数，在页面的onLoad函数里面得到
+			// }
 		]
 	}
 }

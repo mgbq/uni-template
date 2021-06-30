@@ -3,7 +3,7 @@ const CONFIG = {
 	development: {
 		loginTitleTxt: "欢迎使用XXX", // 登录页标题
 		copyrightTxt: "XXXv1.0", // 版本信息
-		assetsPath: "http://liuup.com/img", // 静态资源路径
+		assetsPath: "http://cdn.com/img", // 静态资源路径
 		baseUrl: "http://192.168.1.7:8002",
 		tokenKey: "WECHAT_TRADE", // 登录标识
 		testOpenId: "oEjRxwy7jL9PgG0kWeb4VcDTZEas", // 小程序测试openId

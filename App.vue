@@ -22,7 +22,7 @@
 	@import "static/colorui/icon.css";
 </style>
 <style lang="scss">
-	@import "static/uview-ui/index.scss";
+	@import "uview-ui/index.scss";
 	/*每个页面公共css */
 	@import "static/style/base.scss";
 </style>

@@ -7,11 +7,11 @@
 
 ```有问题给5星后留言可得到及时的解答```
 
-```插件交流群 QQ: 736073015 ```
+```插件交流QQ群 : 736073015 ```
 
 做一个新的项目就需要常用的代码，比如
 
- - 登录，注册 (模板)
+ - 登录，注册 ,找回密码，用户协议，404页面(模板)
 - 全局路由守卫（路由配置）
 - Request封装（请求封装）
 - api集中管理
@@ -22,12 +22,14 @@
 - 全局过滤器filters
 - 配置Vuex(store)
 - 无关系组件间的通信。
-- 等等
+- 使用easycom模式，让您无需引入组件即可直接使用（按需加载）
+- 后面持续更新
 
 为了提高自己的效率（说白了有点懒）决定把这些作为基础模板，下次做新项目直接用就行了
 
 ## 效果图
-![在这里插入图片描述](https://img-blog.csdnimg.cn/20210125164611125.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzMyMzQwODc3,size_16,color_FFFFFF,t_70#pic_center)
+![在这里插入图片描述](https://img-blog.csdnimg.cn/20210630100255442.jpg?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzMyMzQwODc3,size_16,color_FFFFFF,t_70#pic_center)
+
 ## 1、全局路由守卫
 
 #####  (1) 路由拦截
@@ -118,7 +120,7 @@ B组件 触发($emit)
 ## 常见问题
 #### 1 运行不了，控制台报错，请安装依赖
 
-``` npm install ```
+```npm install ```
 
 
 ## 后面持续更新。。。。

@@ -1,10 +1,15 @@
 import Vue from 'vue'
 import App from './App'
 import store from '@/common/store'
-import * as $apis from './apis/index.js'
-import router from './common/router.js'
-import { RouterMount } from 'uni-simple-router'
-import $mUtils from './common/utils.js'
+import * as $apis from '@/apis/index.js'
+// 引入路由
+import {
+	router,
+	RouterMount
+} from '@/common/router';
+Vue.use(router);
+
+import $mUtils from '@/common/utils.js'
 import * as filter from '@/common/filter.js'; // global filter
 Object.keys(filter).forEach(item => {
 	Vue.filter(item, filter[item]);
