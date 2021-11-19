@@ -1,7 +1,6 @@
 {
   "dependencies": {
     "uni-read-pages": "^1.0.5",
-    "uni-simple-router": "^2.0.1",
-    "uview-ui": "^1.8.3"
+    "uni-simple-router": "^2.0.1"
   }
 }

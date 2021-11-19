@@ -4,16 +4,18 @@
 @import './mixin/triangle.scss';            // 画三角形  参数：宽度,朝向,颜色
 @import './mixin/hr.scss';                  // 添加分割线  参数：位置,间隔
 @import './mixin/price-before.scss';        // 价格¥前加
+/*colorui css */
+@import  "static/colorui/main.css";
+@import "static/colorui/icon.css";
+/*uview-ui css */
+@import "uview-ui/index.scss";
 
-/*每个页面公共css */
 page {
     min-height: 100%;
     background-color: #f7f7f7;
 }
 
-/* ==================
-	          flex布局(colorui里面也有相关基础样式)
-	 ==================== */
+/*flex布局(colorui里面也有相关基础样式)*/
 	/* x水平排列*/
 	.x-f {
 		display: flex;

@@ -9,6 +9,12 @@
 	},
 	"pages": [ //pages数组中第一项表示应用启动页，参考：https://uniapp.dcloud.io/collocation/pages
 		{
+			"path": "pages/index/index",
+			"style": {
+				"navigationBarTitleText": "首页"
+			}
+		},
+		{
 			"path": "pages/login/login",
 			"aliasPath": "/", //对于h5端你必须在首页加上aliasPath并设置为/
 			"style": {
@@ -37,30 +43,22 @@
 			}
 		},
 		{
-			"path": "pages/tabbar/home",
-			"style": {
-				"navigationBarTitleText": "首页"
-			}
-		},
-		{
-			"path": "pages/tabbar/me",
+			"path": "pages/me/index",
 			"style": {
 				"navigationBarTitleText": "我的"
 			}
 		}
 	],
-	"subPackages": [
-		{
-			"root": "pages/public",
-			"pages": [{
-				"path": "404",
-				"name": "404",
-				"style": {
-					"navigationBarTitleText": "页面不存在"
-				}
-			}]
-		}
-	],
+	"subPackages": [{
+		"root": "pages/public",
+		"pages": [{
+			"path": "404",
+			"name": "404",
+			"style": {
+				"navigationBarTitleText": "页面不存在"
+			}
+		}]
+	}],
 
 	"globalStyle": {
 		"navigationBarTextStyle": "black",
@@ -74,14 +72,14 @@
 		"borderStyle": "black",
 		"backgroundColor": "#F8F8F8",
 		"list": [{
-				"pagePath": "pages/tabbar/home",
+				"pagePath": "pages/index/index",
 				"iconPath": "static/images/tabbar/tab_home_01.png",
 				"selectedIconPath": "static/images/tabbar/tab_home_02.png",
 				"text": "首页"
 			},
 
 			{
-				"pagePath": "pages/tabbar/me",
+				"pagePath": "pages/me/index",
 				"iconPath": "static/images/tabbar/tab_user_01.png",
 				"selectedIconPath": "static/images/tabbar/tab_user_02.png",
 				"text": "我的"
@@ -91,11 +89,11 @@
 	"condition": { //模式配置，仅开发期间生效
 		"current": 0, //当前激活的模式(list 的索引项)
 		"list": [
-			// {
-			// 	"name": "登录页面", //模式名称
-			// 	"path": "pages/login/login", //启动页面，必选
-			// 	"query": "" //启动参数，在页面的onLoad函数里面得到
-			// }
+			{
+				"name": "登录页面", //模式名称
+				"path": "pages/login/login", //启动页面，必选
+				"query": "" //启动参数，在页面的onLoad函数里面得到
+			}
 		]
 	}
 }

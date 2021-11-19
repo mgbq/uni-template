@@ -30,6 +30,9 @@
 </template>
 
 <script>
+	import {
+		postLogin
+	} from "@/nxTemp/apis/login.js"
 	export default {
 		data() {
 			return {
@@ -57,23 +60,17 @@
 					});
 					return;
 				}
-				
-				that.$Router.pushTab('/pages/tabbar/home');
-				// this.$apis.postLogin(this.login).then(res => {
-				// 	uni.showToast({
-				// 		title: '登录成功！',
-				// 		icon: 'none'
-				// 	});
-				// 	//存token
-				// 	that.$store.commit("SET_TOKEN", res.token);
-				// 	// 跳转首页
-				// 	that.$Router.pushTab({
-				// 		path: '/pages/tabbar/home',
-				// 	});
-				// });
-
-
-
+				postLogin(this.login).then(res => {
+					uni.showToast({
+						title: '登录成功！',
+						icon: 'none'
+					});
+					this.$store.dispatch('setUserData', res.userInfo);
+					// 跳转首页
+					that.$Router.pushTab({
+						path: '/pages/tabbar/home',
+					});
+				});
 			}
 		}
 	}

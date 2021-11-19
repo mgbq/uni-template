@@ -1,11 +1,39 @@
 <template>
-	<view class="u-toast" :class="[isShow ? 'u-show' : '', 'u-type-' + tmpConfig.type, 'u-position-' + tmpConfig.position]" :style="{
-		zIndex: uZIndex
-	}">
-		<view class="u-icon-wrap">
-			<u-icon v-if="tmpConfig.icon" class="u-icon" :name="iconName" :size="30" :color="tmpConfig.type"></u-icon>
-		</view>
-		<text class="u-text">{{tmpConfig.title}}</text>
+	<view class="u-toast">
+		<u-overlay
+			:show="isShow"
+			:custom-style="overlayStyle"
+		>
+			<view
+				class="u-toast__content"
+				:class="['u-type-' + tmpConfig.type, tmpConfig.type === 'loading' && 'u-toast__content--loading']"
+			>
+				<u-loading-icon
+					v-if="tmpConfig.type === 'loading'"
+					mode="circle"
+					color="rgb(255, 255, 255)"
+					inactiveColor="rgb(120, 120, 120)"
+					size="25"
+				></u-loading-icon>
+				<u-icon
+					v-else-if="tmpConfig.type !== 'defalut' && iconName"
+					:name="iconName"
+					size="17"
+					:color="tmpConfig.type"
+					:customStyle="iconStyle"
+				></u-icon>
+				<u-gap
+					v-if="tmpConfig.type === 'loading'"
+					height="12"
+					bgColor="transparent"
+				></u-gap>
+				<text
+					class="u-toast__content__text"
+					:class="['u-toast__content__text--' + tmpConfig.type]"
+					style="max-width: 400rpx;"
+				>{{ tmpConfig.message }}</text>
+			</view>
+		</u-overlay>
 	</view>
 </template>
 
@@ -14,207 +42,258 @@
 	 * toast 消息提示
 	 * @description 此组件表现形式类似uni的uni.showToastAPI，但也有不同的地方。
 	 * @tutorial https://www.uviewui.com/components/toast.html
-	 * @property {String} z-index toast展示时的z-index值
+	 * @property {String | Number}	zIndex		toast展示时的zIndex值 (默认 10090 )
+	 * @property {Boolean}			loading		是否加载中 （默认 false ）
+	 * @property {String | Number}	text		显示的文字内容
+	 * @property {String}			icon		图标，或者绝对路径的图片
+	 * @property {String}			type		主题类型 （默认 default）
+	 * @property {Boolean}			show		是否显示该组件 （默认 false）
+	 * @property {Boolean}			overlay		是否显示透明遮罩，防止点击穿透 （默认 false ）
+	 * @property {String}			position	位置 （默认 'center' ）
+	 * @property {Object}			params		跳转的参数 
+	 * @property {String | Number}  duration	展示时间，单位ms （默认 2000 ）
+	 * @property {Boolean}			isTab		是否返回的为tab页面 （默认 false ）
+	 * @property {String}			url			toast消失后是否跳转页面，有则跳转，优先级高于back参数 
+	 * @property {Function}			callback	执行完后的回调函数 
+	 * @property {Boolean}			back		结束toast是否自动返回上一页 （默认 false ）
+	 * @property {Object}			customStyle	组件的样式，对象形式
 	 * @event {Function} show 显示toast，如需一进入页面就显示toast，请在onReady生命周期调用
 	 * @example <u-toast ref="uToast" />
 	 */
 	export default {
-		name: "u-toast",
-		props: {
-			// z-index值
-			zIndex: {
-				type: [Number, String],
-				default: ''
-			},
-		},
+		name: 'u-toast',
+		mixins: [uni.$u.mpMixin, uni.$u.mixin],
 		data() {
 			return {
 				isShow: false,
 				timer: null, // 定时器
 				config: {
-					params: {}, // URL跳转的参数，对象
-					title: '', // 显示文本
+					message: '', // 显示文本
 					type: '', // 主题类型，primary，success，error，warning，black
 					duration: 2000, // 显示的时间，毫秒
-					isTab: false, // 是否跳转tab页面
-					url: '', // toast消失后是否跳转页面，有则跳转，优先级高于back参数
 					icon: true, // 显示的图标
 					position: 'center', // toast出现的位置
-					callback: null, // 执行完后的回调函数
-					back: false, // 结束toast是否自动返回上一页
+					complete: null, // 执行完后的回调函数
+					overlay: false, // 是否防止触摸穿透
+					loading: false, // 是否加载中状态
 				},
 				tmpConfig: {}, // 将用户配置和内置配置合并后的临时配置变量
-			};
+			}
 		},
 		computed: {
 			iconName() {
 				// 只有不为none，并且type为error|warning|succes|info时候，才显示图标
-				if (['error', 'warning', 'success', 'info'].indexOf(this.tmpConfig.type) >= 0 && this.tmpConfig.icon) {
-					let icon = this.$u.type2icon(this.tmpConfig.type);
-					return icon;
+				if (['error', 'warning', 'success', 'primary'].includes(this.tmpConfig.type)) {
+					return this.$u.type2icon(this.tmpConfig.type)
+				} else {
+					return ''
 				}
 			},
-			uZIndex() {
-				// 显示toast时候，如果用户有传递z-index值，有限使用
-				return this.isShow ? (this.zIndex ? this.zIndex : this.$u.zIndex.toast) : '999999';
+			overlayStyle() {
+				const style = {
+					justifyContent: 'center',
+					alignItems: 'center',
+					display: 'flex'
+				}
+				// 将遮罩设置为100%透明度，避免出现灰色背景
+				style.backgroundColor = 'rgba(0, 0, 0, 0)'
+				return style
+			},
+			iconStyle() {
+				const style = {}
+				// 图标需要一个右边距，以跟右边的文字有隔开的距离
+				style.marginRight = '4px'
+				// #ifdef APP-NVUE
+				// iOSAPP下，图标有1px的向下偏移，这里进行修正
+				if (uni.$u.os() === 'ios') {
+					style.marginTop = '-1px'
+				}
+				// #endif
+				return style
+			},
+			loadingIconColor() {
+				let color = 'rgb(255, 255, 255)'
+				if (['error', 'warning', 'success', 'primary'].includes(this.tmpConfig.type)) {
+					// loading-icon组件内部会对color参数进行一个透明度处理，该方法要求传入的颜色值
+					// 必须为rgb格式的，所以这里做一个处理
+					color = uni.$u.hexToRgb(uni.$u.color[this.tmpConfig.type])
+				}
+				return color
 			}
+		},
+		created() {
+			// 通过主题的形式调用toast，批量生成方法函数
+			['primary', 'success', 'error', 'warning', 'default', 'loading'].map(item => {
+				this[item] = message => this.show({
+					type: item,
+					message
+				})
+			})
 		},
 		methods: {
 			// 显示toast组件，由父组件通过this.$refs.xxx.show(options)形式调用
 			show(options) {
-				// 不降结果合并到this.config变量，避免多次条用u-toast，前后的配置造成混论
-				this.tmpConfig = this.$u.deepMerge(this.config, options);
-				if (this.timer) {
-					// 清除定时器
-					clearTimeout(this.timer);
-					this.timer = null;
-				}
-				this.isShow = true;
+				// 不将结果合并到this.config变量，避免多次调用u-toast，前后的配置造成混乱
+				this.tmpConfig = this.$u.deepMerge(this.config, options)
+				// 清除定时器
+				this.clearTimer()
+				this.isShow = true
 				this.timer = setTimeout(() => {
 					// 倒计时结束，清除定时器，隐藏toast组件
-					this.isShow = false;
-					clearTimeout(this.timer);
-					this.timer = null;
+					this.clearTimer()
 					// 判断是否存在callback方法，如果存在就执行
-					typeof(this.tmpConfig.callback) === 'function' && this.tmpConfig.callback();
-					this.timeEnd();
-				}, this.tmpConfig.duration);
+					typeof(this.tmpConfig.complete) === 'function' && this.tmpConfig.complete()
+				}, this.tmpConfig.duration)
 			},
 			// 隐藏toast组件，由父组件通过this.$refs.xxx.hide()形式调用
 			hide() {
-				this.isShow = false;
-				if (this.timer) {
-					// 清除定时器
-					clearTimeout(this.timer);
-					this.timer = null;
-				}
+				this.clearTimer()
 			},
-			// 倒计时结束之后，进行的一些操作
-			timeEnd() {
-				// 如果带有url值，根据isTab为true或者false进行跳转
-				if (this.tmpConfig.url) {
-					// 如果url没有"/"开头，添加上，因为uni的路由跳转需要"/"开头
-					if (this.tmpConfig.url[0] != '/') this.tmpConfig.url = '/' + this.tmpConfig.url;
-					// 判断是否有传递显式的参数
-					if (Object.keys(this.tmpConfig.params).length) {
-						// 判断用户传递的url中，是否带有参数
-						// 使用正则匹配，主要依据是判断是否有"/","?","="等，如“/page/index/index?name=mary"
-						// 如果有params参数，转换后无需带上"?"
-						let query = '';
-						if (/.*\/.*\?.*=.*/.test(this.tmpConfig.url)) {
-							// object对象转为get类型的参数
-							query = this.$u.queryParams(this.tmpConfig.params, false);
-							this.tmpConfig.url = this.tmpConfig.url + "&" + query;
-						} else {
-							query = this.$u.queryParams(this.tmpConfig.params);
-							this.tmpConfig.url += query;
-						}
-					}
-					// 如果是跳转tab页面，就使用uni.switchTab
-					if (this.tmpConfig.isTab) {
-						uni.switchTab({
-							url: this.tmpConfig.url
-						});
-					} else {
-						uni.navigateTo({
-							url: this.tmpConfig.url
-						});
-					}
-				} else if(this.tmpConfig.back) {
-					// 回退到上一页
-					this.$u.route({
-						type: 'back'
-					})
+			clearTimer() {
+				this.isShow = false
+				// 清除定时器
+				clearTimeout(this.timer)
+				this.timer = null
+			}
+		},
+		beforeDestroy() {
+			this.clearTimer()
+		}
+	}
+</script>
+
+<style lang="scss">
+	@import "../../libs/css/components.scss";
+
+	$u-toast-color:#fff !default;
+	$u-toast-border-radius:4px !default;
+	$u-toast-border-background-color:#585858 !default;
+	$u-toast-border-font-size:14px !default;
+	$u-toast-border-padding:12px 20px !default;
+	$u-toast-loading-border-padding: 20px 20px !default;
+	$u-toast-content-text-color:#fff !default;
+	$u-toast-content-text-font-size:15px !default;
+	$u-toast-u-icon:10rpx !default;
+	$u-toast-u-position-center-top:50% !default;
+	$u-toast-u-position-center-left:50% !default;
+	$u-toast-u-position-center-max-width:80% !default;
+	$u-toast-u-position-top-left:50% !default;
+	$u-toast-u-position-top-top:20% !default;
+	$u-toast-u-position-bottom-left:50% !default;
+	$u-toast-u-position-bottom-bottom:20% !default;
+	$u-toast-u-type-primary-color:$u-primary !default;
+	$u-toast-u-type-primary-background-color:#ecf5ff !default;
+	$u-toast-u-type-primary-border-color:rgb(215, 234, 254) !default;
+	$u-toast-u-type-primary-border-width:1px !default;
+	$u-toast-u-type-success-color: $u-success !default;
+	$u-toast-u-type-success-background-color: #dbf1e1 !default;
+	$u-toast-u-type-success-border-color: #BEF5C8 !default;
+	$u-toast-u-type-success-border-width: 1px !default;
+	$u-toast-u-type-error-color:$u-error !default;
+	$u-toast-u-type-error-background-color:#fef0f0 !default;
+	$u-toast-u-type-error-border-color:#fde2e2 !default;
+	$u-toast-u-type-error-border-width: 1px !default;
+	$u-toast-u-type-warning-color:$u-warning !default;
+	$u-toast-u-type-warning-background-color:#fdf6ec !default;
+	$u-toast-u-type-warning-border-color:#faecd8 !default;
+	$u-toast-u-type-warning-border-width: 1px !default;
+	$u-toast-u-type-default-color:#fff !default;
+	$u-toast-u-type-default-background-color:#585858 !default;
+
+	.u-toast {
+		&__content {
+			@include flex;
+			padding: $u-toast-border-padding;
+			border-radius: $u-toast-border-radius;
+			background-color: $u-toast-border-background-color;
+			color: $u-toast-color;
+			align-items: center;
+			/* #ifndef APP-NVUE */
+			max-width: 600rpx;
+			/* #endif */
+			position: relative;
+
+			&--loading {
+				flex-direction: column;
+				padding: $u-toast-loading-border-padding;
+			}
+
+			&__text {
+				color: $u-toast-content-text-color;
+				font-size: $u-toast-content-text-font-size;
+				line-height: $u-toast-content-text-font-size;
+
+				&--default {
+					color: $u-toast-content-text-color;
+				}
+
+				&--error {
+					color: $u-error;
+				}
+
+				&--primary {
+					color: $u-primary;
+				}
+
+				&--success {
+					color: $u-success;
+				}
+
+				&--warning {
+					color: $u-warning;
 				}
 			}
 		}
-	};
-</script>
-
-<style lang="scss" scoped>
-	@import "../../libs/css/style.components.scss";
-	
-	.u-toast {
-		position: fixed;
-		z-index: -1;
-		transition: opacity 0.3s;
-		text-align: center;
-		color: #fff;
-		border-radius: 8rpx;
-		background: #585858;
-		@include vue-flex;
-		align-items: center;
-		justify-content: center;
-		font-size: 28rpx;
-		opacity: 0;
-		pointer-events: none;
-		padding: 18rpx 40rpx;
-	}
-
-	.u-toast.u-show {
-		opacity: 1;
-	}
-
-	.u-icon {
-		margin-right: 10rpx;
-		@include vue-flex;
-		align-items: center;
-		line-height: normal;
 	}
 
 	.u-position-center {
-		left: 50%;
-		top: 50%;
-		transform: translate(-50%,-50%);
-		/* #ifndef APP-NVUE */
-		max-width: 70%;
-		/* #endif */
+		top: $u-toast-u-position-center-top;
+		left: $u-toast-u-position-center-left;
+		transform: translate(-50%, -50%);
 	}
 
 	.u-position-top {
-		left: 50%;
-		top: 20%;
-		transform: translate(-50%,-50%);
+		left: $u-toast-u-position-top-left;
+		top: $u-toast-u-position-top-top;
+		transform: translate(-50%, -50%);
 	}
 
 	.u-position-bottom {
-		left: 50%;
-		bottom: 20%;
-		transform: translate(-50%,-50%);
+		left: $u-toast-u-position-bottom-left;
+		bottom: $u-toast-u-position-bottom-bottom;
+		transform: translate(-50%, -50%);
 	}
 
 	.u-type-primary {
-		color: $u-type-primary;
-		background-color: $u-type-primary-light;
-		border: 1px solid rgb(215, 234, 254);
+		color: $u-toast-u-type-primary-color;
+		background-color: $u-toast-u-type-primary-background-color;
+		border-color: $u-toast-u-type-primary-border-color;
+		border-width: $u-toast-u-type-primary-border-width;
 	}
 
 	.u-type-success {
-		color: $u-type-success;
-		background-color: $u-type-success-light;
-		border: 1px solid #BEF5C8;
+		color: $u-toast-u-type-success-color;
+		background-color: $u-toast-u-type-success-background-color;
+		border-color: $u-toast-u-type-success-border-color;
+		border-width: 1px;
 	}
 
 	.u-type-error {
-		color: $u-type-error;
-		background-color: $u-type-error-light;
-		border: 1px solid #fde2e2;
+		color: $u-toast-u-type-error-color;
+		background-color: $u-toast-u-type-error-background-color;
+		border-color: $u-toast-u-type-error-border-color;
+		border-width: $u-toast-u-type-error-border-width;
 	}
 
 	.u-type-warning {
-		color: $u-type-warning;
-		background-color: $u-type-warning-light;
-		border: 1px solid #faecd8;
-	}
-
-	.u-type-info {
-		color: $u-type-info;
-		background-color: $u-type-info-light;
-		border: 1px solid #ebeef5;
+		color: $u-toast-u-type-warning-color;
+		background-color: $u-toast-u-type-warning-background-color;
+		border-color: $u-toast-u-type-warning-border-color;
+		border-width: 1px;
 	}
 
 	.u-type-default {
-		color: #fff;
-		background-color: #585858;
+		color: $u-toast-u-type-default-color;
+		background-color: $u-toast-u-type-default-background-color;
 	}
 </style>
