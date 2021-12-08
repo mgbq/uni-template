@@ -22,9 +22,9 @@
 		</view>
 
 		<view class="agreenment">
-			<navigator url="forget" open-type="navigate">忘记密码</navigator>
+			<navigator url="/pages/login/forget" open-type="navigate">忘记密码</navigator>
 			<text>|</text>
-			<navigator url="reg" open-type="navigate">注册账户</navigator>
+			<navigator url="/pages/login/reg" open-type="navigate">注册账户</navigator>
 		</view>
 	</view>
 </template>
