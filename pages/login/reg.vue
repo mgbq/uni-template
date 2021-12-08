@@ -31,7 +31,7 @@
 			<image @tap="agreementSuccess"
 				:src="agreement==true?'/static/images/login/ty1.png':'/static/images/login/ty0.png'"></image>
 			<text @tap="agreementSuccess"> 同意</text>
-			<navigator url="agreement?id=1" open-type="navigate">《软件用户协议》</navigator>
+			<navigator url="/pages/login/agreement?id=1" open-type="navigate">《软件用户协议》</navigator>
 		</view>
 	</view>
 </template>
