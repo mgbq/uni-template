@@ -44,17 +44,18 @@
 					<!-- 在nvue中，image图片的宽度默认为屏幕宽度，需要通过flex:1撑开，另外必须设置高度才能显示图片 -->
 					<image
 						class="u-swiper__wrapper__item__wrapper__image"
-						v-if="$u.test.image(getSource(item))"
+						v-if="getItemType(item) === 'image'"
 						:src="getSource(item)"
 						:mode="imgMode"
 						@tap="clickHandler(index)"
 						:style="{
-							height: $u.addUnit(height)
+							height: $u.addUnit(height),
+							borderRadius: $u.addUnit(radius)
 						}"
 					></image>
 					<video
 						class="u-swiper__wrapper__item__wrapper__video"
-						v-if="$u.test.video(getSource(item))"
+						v-if="getItemType(item) === 'video'"
 						:id="`video-${index}`"
 						:enable-progress-gesture="false"
 						:src="getSource(item)"
@@ -64,6 +65,7 @@
 							height: $u.addUnit(height)
 						}"
 						controls
+						@tap="clickHandler(index)"
 					></video>
 					<text
 						v-if="showTitle && $u.test.object(item) && item.title && $u.test.image(getSource(item))"
@@ -129,6 +131,12 @@
 				currentIndex: 0
 			}
 		},
+		watch: {
+			current(val, preVal) {
+				if(val === preVal) return;
+				this.currentIndex = val; // 和上游数据关联上
+			}
+		},
 		computed: {
 			itemStyle() {
 				return index => {
@@ -146,6 +154,15 @@
 			}
 		},
 		methods: {
+      getItemType(item) {
+        if (typeof item === 'string') return uni.$u.test.video(this.getSource(item)) ? 'video' : 'image'
+        if (typeof item === 'object' && this.keyName) {
+          if (!item.type) return uni.$u.test.video(this.getSource(item)) ? 'video' : 'image'
+          if (item.type === 'image') return 'image'
+          if (item.type === 'video') return 'video'
+          return 'image'
+        }
+      },
 			// 获取目标路径，可能数组中为字符串，对象的形式，额外可指定对象的目标属性名keyName
 			getSource(item) {
 				if (typeof item === 'string') return item
@@ -184,7 +201,7 @@
 	}
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 	@import "../../libs/css/components.scss";
 
 	.u-swiper {
@@ -198,12 +215,14 @@
 			flex: 1;
 
 			&__item {
+				flex: 1;
 
 				&__wrapper {
 					@include flex;
 					position: relative;
 					overflow: hidden;
 					transition: transform 0.3s;
+					flex: 1;
 
 					&__image {
 						flex: 1;

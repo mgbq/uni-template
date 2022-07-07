@@ -1,117 +1,126 @@
 <template>
 	<view class="u-upload" :style="[$u.addStyle(customStyle)]">
-		<view class="u-upload__wrap" v-if="previewImage">
-			<view
-			    class="u-upload__wrap__preview"
-			    v-for="(item, index) in lists"
-			    :key="index"
-			>
-				<image
-				    v-if="item.isImage || (item.type && item.type === 'image')"
-				    :src="item.thumb || item.url"
-				    :mode="imageMode"
-				    class="u-upload__wrap__preview__image"
-				    @tap="onPreviewImage(item)"
-					:style="{
-						width: $u.addUnit(width),
-						height: $u.addUnit(height)
-					}"
-				/>
+		<view class="u-upload__wrap" >
+			<template v-if="previewImage">
+				<view
+				    class="u-upload__wrap__preview"
+				    v-for="(item, index) in lists"
+				    :key="index"
+				>
+					<image
+					    v-if="item.isImage || (item.type && item.type === 'image')"
+					    :src="item.thumb || item.url"
+					    :mode="imageMode"
+					    class="u-upload__wrap__preview__image"
+					    @tap="onPreviewImage(item)"
+						:style="[{
+							width: $u.addUnit(width),
+							height: $u.addUnit(height)
+						}]"
+					/>
+					<view
+					    v-else
+					    class="u-upload__wrap__preview__other"
+					>
+						<u-icon
+						    color="#80CBF9"
+						    size="26"
+						    :name="item.isVideo || (item.type && item.type === 'video') ? 'movie' : 'folder'"
+						></u-icon>
+						<text class="u-upload__wrap__preview__other__text">{{item.isVideo || (item.type && item.type === 'video') ? '视频' : '文件'}}</text>
+					</view>
+					<view
+					    class="u-upload__status"
+					    v-if="item.status === 'uploading' || item.status === 'failed'"
+					>
+						<view class="u-upload__status__icon">
+							<u-icon
+							    v-if="item.status === 'failed'"
+							    name="close-circle"
+							    color="#ffffff"
+							    size="25"
+							/>
+							<u-loading-icon
+							    size="22"
+							    mode="circle"
+							    color="#ffffff"
+							    v-else
+							/>
+						</view>
+						<text
+						    v-if="item.message"
+						    class="u-upload__status__message"
+						>{{ item.message }}</text>
+					</view>
+					<view
+					    class="u-upload__deletable"
+					    v-if="item.status !== 'uploading' && (deletable || item.deletable)"
+					    @tap.stop="deleteItem(index)"
+					>
+						<view class="u-upload__deletable__icon">
+							<u-icon
+							    name="close"
+							    color="#ffffff"
+							    size="10"
+							></u-icon>
+						</view>
+					</view>
+					<view
+					    class="u-upload__success"
+					    v-if="item.status === 'success'"
+					>
+						<!-- #ifdef APP-NVUE -->
+						<image
+						    :src="successIcon"
+						    class="u-upload__success__icon"
+						></image>
+						<!-- #endif -->
+						<!-- #ifndef APP-NVUE -->
+						<view class="u-upload__success__icon">
+							<u-icon
+							    name="checkmark"
+							    color="#ffffff"
+							    size="12"
+							></u-icon>
+						</view>
+						<!-- #endif -->
+					</view>
+				</view>
+				
+			</template>
+			
+			<template v-if="isInCount">
+				<view
+				    v-if="$slots.default || $slots.$default"
+				    @tap="chooseFile"
+				>
+					<slot />
+				</view>
 				<view
 				    v-else
-				    class="u-upload__wrap__preview__other"
+				    class="u-upload__button"
+				    :hover-class="!disabled ? 'u-upload__button--hover' : ''"
+				    hover-stay-time="150"
+				    @tap="chooseFile"
+				    :class="[disabled && 'u-upload__button--disabled']"
+					:style="[{
+						width: $u.addUnit(width),
+						height: $u.addUnit(height)
+					}]"
 				>
 					<u-icon
-					    color="#80CBF9"
+					    :name="uploadIcon"
 					    size="26"
-					    :name="item.isVideo || (item.type && item.type === 'video') ? 'movie' : 'folder'"
+					    :color="uploadIconColor"
 					></u-icon>
-					<text class="u-upload__wrap__preview__other__text">{{item.isVideo || (item.type && item.type === 'video') ? '视频' : '文件'}}</text>
-				</view>
-				<view
-				    class="u-upload__status"
-				    v-if="item.status === 'uploading' || item.status === 'failed'"
-				>
-					<view class="u-upload__status__icon">
-						<u-icon
-						    v-if="item.status === 'failed'"
-						    name="close-circle"
-						    color="#ffffff"
-						    size="25"
-						/>
-						<u-loading-icon
-						    size="22"
-						    mode="circle"
-						    color="#ffffff"
-						    v-else
-						/>
-					</view>
 					<text
-					    v-if="item.message"
-					    class="u-upload__status__message"
-					>{{ item.message }}</text>
+					    v-if="uploadText"
+					    class="u-upload__button__text"
+					>{{ uploadText }}</text>
 				</view>
-				<view
-				    class="u-upload__deletable"
-				    v-if="item.status !== 'uploading' && (deletable || item.deletable)"
-				    @tap.stop="deleteItem(index)"
-				>
-					<view class="u-upload__deletable__icon">
-						<u-icon
-						    name="close"
-						    color="#ffffff"
-						    size="10"
-						></u-icon>
-					</view>
-				</view>
-				<view
-				    class="u-upload__success"
-				    v-if="item.status === 'success'"
-				>
-					<!-- #ifdef APP-NVUE -->
-					<image
-					    :src="successIcon"
-					    class="u-upload__success__icon"
-					></image>
-					<!-- #endif -->
-					<!-- #ifndef APP-NVUE -->
-					<view class="u-upload__success__icon">
-						<u-icon
-						    name="checkmark"
-						    color="#ffffff"
-						    size="12"
-						></u-icon>
-					</view>
-					<!-- #endif -->
-				</view>
-			</view>
+			</template>
 		</view>
-		<template v-if="isInCount">
-			<view
-			    v-if="$slots.default || $slots.$default"
-			    @tap="chooseFile"
-			>
-				<slot />
-			</view>
-			<view
-			    v-else
-			    class="u-upload__button"
-			    :hover-class="!disabled && 'u-upload__button--hover'"
-			    hover-stay-time="150"
-			    @tap="chooseFile"
-			    :class="[disabled && 'u-upload__button--disabled']"
-			>
-				<u-icon
-				    :name="uploadIcon"
-				    size="26"
-				    color="#D3D4D6"
-				></u-icon>
-				<text
-				    v-if="uploadText"
-				    class="u-upload__button__text"
-				>{{ uploadText }}</text>
-			</view>
-		</template>
+
 	</view>
 </template>
 
@@ -132,6 +141,7 @@
 	 * @property {String}			camera				当accept为video时生效，可选值为back或front（默认 'back' ）
 	 * @property {Number}			maxDuration			当accept为video时生效，拍摄视频最长拍摄时间，单位秒（默认 60 ）
 	 * @property {String}			uploadIcon			上传区域的图标，只能内置图标（默认 'camera-fill' ）
+	 * @property {String}			uploadIconColor		上传区域的图标的字体颜色，只能内置图标（默认 #D3D4D6 ）
 	 * @property {Boolean}			useBeforeRead		是否开启文件读取前事件（默认 false ）
 	 * @property {Boolean}			previewFullImage	是否显示组件自带的图片预览功能（默认 true ）
 	 * @property {String | Number}	maxCount			最大上传数量（默认 52 ）
@@ -182,9 +192,10 @@
 				} = this;
 				const lists = fileList.map((item) =>
 					Object.assign(Object.assign({}, item), {
-						isImage: uni.$u.test.image(item.url),
-						isVideo: uni.$u.test.video(item.url),
-						deletable: typeof(item.deletable) === 'boolean' ? item.deletable : true,
+						// 如果item.url为本地选择的blob文件的话，无法判断其为video还是image，此处优先通过accept做判断处理
+						isImage: this.accept === 'image' || uni.$u.test.image(item.url || item.thumb),
+						isVideo: this.accept === 'video' || uni.$u.test.video(item.url || item.thumb),
+						deletable: typeof(item.deletable) === 'boolean' ? item.deletable : this.deletable,
 					})
 				);
 				this.lists = lists
@@ -198,11 +209,18 @@
 					disabled
 				} = this;
 				if (disabled) return;
+				// 如果用户传入的是字符串，需要格式化成数组
+				let capture;
+				try {
+					capture = uni.$u.test.array(this.capture) ? this.capture : this.capture.split(',');
+				}catch(e) {
+					capture = [];
+				}
 				chooseFile(
 						Object.assign({
 							accept: this.accept,
 							multiple: this.multiple,
-							capture: this.capture,
+							capture: capture,
 							compressed: this.compressed,
 							maxDuration: this.maxDuration,
 							sizeType: this.sizeType,
@@ -293,8 +311,8 @@
 				if (!item.isImage || !this.previewFullImage) return
 				uni.previewImage({
 					// 先filter找出为图片的item，再返回filter结果中的图片url
-					urls: this.lists.filter((item) => uni.$u.test.image(item.url)).map((item) => item.url),
-					current: item.url,
+					urls: this.lists.filter((item) => this.accept === 'image' || uni.$u.test.image(item.url || item.thumb)).map((item) => item.url || item.thumb),
+					current: item.url || item.thumb,
 					fail() {
 						uni.$u.toast('预览图片失败')
 					},
@@ -318,10 +336,7 @@
 						),
 					current: index,
 					fail() {
-						wx.showToast({
-							title: '预览视频失败',
-							icon: 'none'
-						});
+						uni.$u.toast('预览视频失败')
 					},
 				});
 			},
@@ -331,7 +346,7 @@
 				} = event.currentTarget.dataset;
 				const item = this.data.lists[index];
 				this.$emit(
-					'click-preview',
+					'clickPreview',
 					Object.assign(Object.assign({}, item), this.getDetail(index))
 				);
 			}
@@ -339,7 +354,7 @@
 	}
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 	@import '../../libs/css/components.scss';
 	$u-upload-preview-border-radius: 2px !default;
 	$u-upload-preview-margin: 0 8px 8px 0 !default;
@@ -389,14 +404,17 @@
 	$u-upload-text-font-size:11px !default;
 	$u-upload-text-color:$u-tips-color !default;
 	$u-upload-text-margin-top: 2px !default;
-	$u-upload-hover-bgColor:rgb(240, 241, 243) !default;
+	$u-upload-hover-bgColor:rgb(230, 231, 233) !default;
 	$u-upload-disabled-opacity:.5 !default;
 
 	.u-upload {
-		@include flex;
+		@include flex(column);
+		flex: 1;
 
 		&__wrap {
 			@include flex;
+			flex-wrap: wrap;
+			flex: 1;
 
 			&__preview {
 				border-radius: $u-upload-preview-border-radius;
@@ -411,6 +429,8 @@
 				}
 
 				&__other {
+					width: $u-upload-image-width;
+					height: $u-upload-image-height;
 					background-color: $u-upload-other-bgColor;
 					flex: $u-upload-other-flex;
 					@include flex(column);

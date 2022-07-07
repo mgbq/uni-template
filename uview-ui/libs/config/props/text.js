@@ -19,7 +19,6 @@ export default {
         href: '',
         format: '',
         call: false,
-        encrypt: false,
         openType: '',
         bold: false,
         block: false,
@@ -29,7 +28,6 @@ export default {
         iconStyle: () => ({
             fontSize: '15px'
         }),
-        precision: true,
         decoration: 'none',
         margin: 0,
         lineHeight: '',

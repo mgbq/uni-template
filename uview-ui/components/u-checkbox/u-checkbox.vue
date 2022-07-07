@@ -230,11 +230,16 @@
 				this.emitEvent()
 				typeof this.parent.unCheckedOther === 'function' && this.parent.unCheckedOther(this)
 			}
+		},
+		watch:{
+			checked(){
+				this.isChecked = this.checked
+			}
 		}
 	}
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 	@import "../../libs/css/components.scss";
 	$u-checkbox-icon-wrap-margin-right:6px !default;
 	$u-checkbox-icon-wrap-font-size:6px !default;

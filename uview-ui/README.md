@@ -4,7 +4,6 @@
 <h3 align="center" style="margin: 30px 0 30px;font-weight: bold;font-size:40px;">uView</h3>
 <h3 align="center">多平台快速开发的UI框架</h3>
 
-
 ## 说明
 
 uView UI，是[uni-app](https://uniapp.dcloud.io/)生态优秀的UI框架，全面的组件和便捷的工具会让您信手拈来，如鱼得水
@@ -22,7 +21,7 @@ uView UI，是[uni-app](https://uniapp.dcloud.io/)生态优秀的UI框架，全�
 ## 安装
 
 ```bash
-# npm方式安装
+# npm方式安装，插件市场导入无需执行此命令
 npm i uview-ui
 ```
 
@@ -75,7 +74,7 @@ Vue.use(uView);
 
 ```html
 <template>
-	<u-button>按钮</u-button>
+	<u-button text="按钮"></u-button>
 </template>
 ```
 

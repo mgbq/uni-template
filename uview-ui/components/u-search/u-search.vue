@@ -12,7 +12,6 @@
 				backgroundColor: bgColor,
 				borderRadius: shape == 'round' ? '100px' : '4px',
 				borderColor: borderColor,
-				height: height + 'rpx'
 			}"
 		>
 			<template v-if="$slots.label || label !== null">
@@ -22,7 +21,8 @@
 			</template>
 			<view class="u-search__content__icon">
 				<u-icon
-				    :size="22"
+					@tap="clickIcon"
+				    :size="searchIconSize"
 				    :name="searchIcon"
 				    :color="searchIconColor ? searchIconColor : color"
 				></u-icon>
@@ -46,6 +46,7 @@
 					textAlign: inputAlign,
 					color: color,
 					backgroundColor: bgColor,
+					height: $u.addUnit(height)
 				}, inputStyle]"
 			/>
 			<view
@@ -90,6 +91,7 @@
 	 * @property {Boolean}			disabled			是否启用输入框（默认 false ）
 	 * @property {String}			borderColor			边框颜色，配置了颜色，才会有边框 (默认 'transparent' )
 	 * @property {String}			searchIconColor		搜索图标的颜色，默认同输入框字体颜色 (默认 '#909399' )
+	 * @property {Number | String}	searchIconSize 搜索图标的字体，默认22
 	 * @property {String}			color				输入框字体颜色（默认 '#606266' ）
 	 * @property {String}			placeholderColor	placeholder的颜色（默认 '#909399' ）
 	 * @property {String}			searchIcon			输入框左边的图标，可以为uView图标名称或图片路径  (默认 'search' )
@@ -100,7 +102,7 @@
 	 * @property {String | Number}	height				输入框高度，单位px（默认 64 ）
 	 * @property {String | Number}	label				搜索框左边显示内容
 	 * @property {Object}			customStyle			定义需要用到的外部样式
-	 * 
+	 *
 	 * @event {Function} change 输入框内容发生变化时触发
 	 * @event {Function} search 用户确定搜索时触发，用户按回车键，或者手机键盘右下角的"搜索"键时触发
 	 * @event {Function} custom 用户点击右侧控件时触发
@@ -190,12 +192,16 @@
 			// 点击搜索框，只有disabled=true时才发出事件，因为禁止了输入，意味着是想跳转真正的搜索页
 			clickHandler() {
 				if (this.disabled) this.$emit('click');
+			},
+			// 点击左边图标
+			clickIcon() {
+				this.$emit('clickIcon');
 			}
 		}
 	}
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 @import "../../libs/css/components.scss";
 $u-search-content-padding: 0 10px !default;
 $u-search-label-color: $u-main-color !default;
@@ -217,8 +223,8 @@ $u-search-action-margin-left: 5px !default;
 
 /* #ifdef H5 */
 // iOS15在H5下，hx的某些版本，input type=search时，会多了一个搜索图标，进行移除
-[type="search"]::-webkit-search-decoration {  
-    display: none;  
+[type="search"]::-webkit-search-decoration {
+    display: none;
 }
 /* #endif */
 
@@ -235,6 +241,8 @@ $u-search-action-margin-left: 5px !default;
 		justify-content: space-between;
 		border-width: 1px;
 		border-color: transparent;
+		border-style: solid;
+		overflow: hidden;
 
 		&__icon {
 			@include flex;

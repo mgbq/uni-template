@@ -29,14 +29,14 @@
 
 // flex布局
 .u-flex,
-.u-felx-row,
+.u-flex-row,
 .u-flex-x {
 	@include flex;
 }
 
 .u-flex-y,
 .u-flex-column {
-	@include flex('column');
+	@include flex(column);
 }
 
 .u-flex-x-center {

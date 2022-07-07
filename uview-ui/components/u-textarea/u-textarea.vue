@@ -20,7 +20,7 @@
             :disableDefaultPadding="disableDefaultPadding"
             :holdKeyboard="holdKeyboard"
             :maxlength="maxlength"
-            confirmType="confirmType"
+            :confirmType="confirmType"
             @focus="onFocus"
             @blur="onBlur"
             @linechange="onLinechange"
@@ -34,7 +34,7 @@
                 'background-color': disabled ? 'transparent' : '#fff',
             }"
             v-if="count"
-            >{{ value.length }}/{{ maxlength }}</text
+            >{{ innerValue.length }}/{{ maxlength }}</text
         >
     </view>
 </template>
@@ -194,7 +194,7 @@ export default {
 };
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 @import "../../libs/css/components.scss";
 
 .u-textarea {
@@ -221,6 +221,7 @@ export default {
         flex: 1;
         font-size: 15px;
         color: $u-content-color;
+		width: 100%;
     }
 
     &__count {

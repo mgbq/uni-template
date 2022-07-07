@@ -20,11 +20,6 @@ export default {
             type: [String, Number],
             default: uni.$u.props.popup.duration
         },
-        // 圆角值
-        borderRadius: {
-            type: [String, Number],
-            default: uni.$u.props.popup.borderRadius
-        },
         // 是否显示关闭图标
         closeable: {
             type: Boolean,
@@ -62,7 +57,7 @@ export default {
         },
         // 是否显示圆角
         round: {
-            type: Boolean,
+            type: [Boolean, String, Number],
             default: uni.$u.props.popup.round
         },
         // mode=center，也即中部弹出时，是否使用缩放模式

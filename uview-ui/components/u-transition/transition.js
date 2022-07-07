@@ -28,7 +28,7 @@ export default {
         },
         // #ifndef APP-NVUE
         // vue版本的组件进场处理
-        vueEnter() {
+         vueEnter() {
             // 动画进入时的类名
             const classNames = getClassNames(this.mode)
             // 定义状态和发出动画进入前事件
@@ -37,11 +37,15 @@ export default {
             this.inited = true
             this.display = true
             this.classes = classNames.enter
-            this.$nextTick(() => {
-                // 组件动画进入后触发的事件
-                this.$emit('afterEnter')
+            this.$nextTick(async () => {
+				// #ifdef H5
+				await uni.$u.sleep(20)
+				// #endif
                 // 标识动画尚未结束
+                this.$emit('enter')
                 this.transitionEnded = false
+				// 组件动画进入后触发的事件
+                this.$emit('afterEnter')
                 // 赋予组件enter-to类名
                 this.classes = classNames['enter-to']
             })
@@ -58,8 +62,9 @@ export default {
             this.classes = classNames.leave
 
             this.$nextTick(() => {
-                // 标记动画已经结束了
-                this.transitionEnded = false
+               // 动画正在离场的状态
+               this.transitionEnded = false
+               this.$emit('leave')
                 // 组件执行动画，到了执行的执行时间后，执行一些额外处理
                 setTimeout(this.onTransitionEnd, this.duration)
                 this.classes = classNames['leave-to']

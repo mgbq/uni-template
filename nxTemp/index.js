@@ -1,6 +1,8 @@
 import store from '@/nxTemp/store';
 import wechat from '@/nxTemp/wechat/wechat';
 import tools from '@/nxTemp/utils/tools'
+import cloudFun from '@/nxTemp/cloudFun'// 云函数方法
+import nxShare from '@/nxTemp/utils/share.js'
 import * as filter from '@/nxTemp/filter';
 const install = Vue => {
 	// global filter
@@ -10,8 +12,10 @@ const install = Vue => {
 	// 挂载函数
 	Vue.prototype.$store = store;
 	Vue.prototype.$tools = tools;
+	Vue.prototype.$cloudFun = cloudFun;
 	// event Bus 用于无关系组件间的通信。
 	Vue.prototype.$bus = new Vue()
+	Vue.mixin(nxShare);
 }
 
 export async function init(options) {

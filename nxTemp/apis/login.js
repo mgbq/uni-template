@@ -1,7 +1,9 @@
-import http from '@/nxTemp/config/requestConfig'
-import config from "@/nxTemp/config/index.config.js";
-
+import request from "@/nxTemp/request/ajax.js";
 // 用户登录
 export function postLogin(data) {
-	return http.post(`${config.baseUrl}/shop/auth/login`, data);
+	return request({
+		url: '/user/login',
+		method: 'POST',
+		data
+	})
 }

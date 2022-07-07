@@ -9,6 +9,7 @@
 		>
 			<!-- 微信小程序中，将一个参数设置空字符串，结果会变成字符串"true" -->
 			<slot name="label">
+				<!-- {{required}} -->
 				<view
 					class="u-form-item__body__left"
 					v-if="required || leftIcon || label"
@@ -36,7 +37,7 @@
 						<text
 							class="u-form-item__body__left__content__label"
 							:style="[parentData.labelStyle, {
-								justifyContent: parentData.labelAlign === 'left' ? 'flex-start' : elLabelAlign === 'center' ? 'center' : 'flex-end'
+								justifyContent: parentData.labelAlign === 'left' ? 'flex-start' : parentData.labelAlign === 'center' ? 'center' : 'flex-end'
 							}]"
 						>{{ label }}</text>
 					</view>
@@ -58,16 +59,17 @@
 		</view>
 		<slot name="error">
 			<text
-				v-if="!!message"
+				v-if="!!message && parentData.errorType === 'message'"
 				class="u-form-item__body__right__message"
 				:style="{
-					marginLeft: $u.addUnit(labelWidth || parentData.labelWidth)
+					marginLeft:  $u.addUnit(parentData.labelPosition === 'top' ? 0 : (labelWidth || parentData.labelWidth))
 				}"
 			>{{ message }}</text>
 		</slot>
 		<u-line
 			v-if="borderBottom"
-			:customStyle="`margin-top: ${message ? '5px' : 0}`"
+			:color="message && parentData.errorType === 'border-bottom' ? $u.color.error : propsLine.color"
+			:customStyle="`margin-top: ${message && parentData.errorType === 'message' ? '5px' : 0}`"
 		></u-line>
 	</view>
 </template>
@@ -84,8 +86,9 @@
 	 * @property {String | Number}	labelWidth		label的宽度，单位px
 	 * @property {String}			rightIcon		右侧图标
 	 * @property {String}			leftIcon		左侧图标
+	 * @property {String | Object} leftIconStyle 左侧图标的样式
 	 * @property {Boolean}			required		是否显示左边的必填星号，只作显示用，具体校验必填的逻辑，请在rules中配置 (默认 false )
-	 * 
+	 *
 	 * @example <u-form-item label="姓名" prop="userInfo.name" borderBottom ref="item1"></u-form-item>
 	 */
 	export default {
@@ -103,11 +106,18 @@
 					// 提示文本的样式
 					labelStyle: {},
 					// 提示文本的宽度
-					labelWidth: 45
+					labelWidth: 45,
+					// 错误提示方式
+					errorType: 'message'
 				}
 			}
 		},
 		// 组件创建完成时，将当前实例保存到u-form中
+		computed: {
+			propsLine() {
+				return uni.$u.props.line
+			}
+		},
 		mounted() {
 			this.init()
 		},
@@ -145,7 +155,7 @@
 	}
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 	@import "../../libs/css/components.scss";
 
 	.u-form-item {

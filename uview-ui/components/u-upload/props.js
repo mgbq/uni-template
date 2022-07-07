@@ -23,12 +23,17 @@ export default {
         // 当accept为video时生效，拍摄视频最长拍摄时间，单位秒
         maxDuration: {
             type: Number,
-            value: uni.$u.props.upload.maxDuration
+            default: uni.$u.props.upload.maxDuration
         },
         // 上传区域的图标，只能内置图标
         uploadIcon: {
             type: String,
             default: uni.$u.props.upload.uploadIcon
+        },
+        // 上传区域的图标的颜色，默认
+        uploadIconColor: {
+            type: String,
+            default: uni.$u.props.upload.uploadIconColor
         },
         // 是否开启文件读取前事件
         useBeforeRead: {

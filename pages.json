@@ -15,50 +15,57 @@
 			}
 		},
 		{
-			"path": "pages/login/login",
-			"aliasPath": "/", //对于h5端你必须在首页加上aliasPath并设置为/
-			"style": {
-				"navigationBarTitleText": "登录",
-				"navigationBarBackgroundColor": "#FFFFFF"
-			}
-		},
-		{
-			"path": "pages/login/reg",
-			"style": {
-				"navigationBarTitleText": "注册",
-				"navigationBarBackgroundColor": "#FFFFFF"
-			}
-		},
-		{
-			"path": "pages/login/forget",
-			"style": {
-				"navigationBarTitleText": "忘记密码",
-				"navigationBarBackgroundColor": "#FFFFFF"
-			}
-		},
-		{
-			"path": "pages/login/agreement",
-			"style": {
-				"navigationBarTitleText": "用户协议"
-			}
-		},
-		{
 			"path": "pages/me/index",
 			"style": {
 				"navigationBarTitleText": "我的"
 			}
 		}
+
 	],
 	"subPackages": [{
-		"root": "pages/public",
-		"pages": [{
-			"path": "404",
-			"name": "404",
-			"style": {
-				"navigationBarTitleText": "页面不存在"
-			}
-		}]
-	}],
+			"root": "pages/public",
+			"pages": [{
+				"path": "404",
+				"name": "404",
+				"style": {
+					"navigationBarTitleText": "页面不存在"
+				}
+			}]
+		},
+		{
+			"root": "pages/login",
+			"pages": [{
+					"path": "login",
+					"aliasPath": "/", //对于h5端你必须在首页加上aliasPath并设置为/
+					"style": {
+						"navigationBarTitleText": "登录",
+						"navigationBarBackgroundColor": "#FFFFFF"
+					}
+				},
+				{
+					"path": "reg",
+					"style": {
+						"navigationBarTitleText": "注册",
+						"navigationBarBackgroundColor": "#FFFFFF"
+					}
+				},
+				{
+					"path": "forget",
+					"style": {
+						"navigationBarTitleText": "忘记密码",
+						"navigationBarBackgroundColor": "#FFFFFF"
+					}
+				},
+				{
+					"path": "agreement",
+					"style": {
+						"navigationBarTitleText": "用户协议"
+					}
+				}
+			]
+		}
+
+	],
 
 	"globalStyle": {
 		"navigationBarTextStyle": "black",
@@ -67,33 +74,31 @@
 		"backgroundColor": "#F8F8F8"
 	},
 	"tabBar": {
-		"color": "#7A7E83",
-		"selectedColor": "#fe519f",
-		"borderStyle": "black",
-		"backgroundColor": "#F8F8F8",
+		"borderStyle": "white",
+		"selectedColor": "#333333",
+		"backgroundColor": "#FFFFFF",
+		"color": "#999999",
 		"list": [{
 				"pagePath": "pages/index/index",
-				"iconPath": "static/images/tabbar/tab_home_01.png",
-				"selectedIconPath": "static/images/tabbar/tab_home_02.png",
+				"iconPath": "static/images/tabbar/tab-home.png",
+				"selectedIconPath": "static/images/tabbar/tab-home-selected.png",
 				"text": "首页"
 			},
 
 			{
 				"pagePath": "pages/me/index",
-				"iconPath": "static/images/tabbar/tab_user_01.png",
-				"selectedIconPath": "static/images/tabbar/tab_user_02.png",
+				"iconPath": "static/images/tabbar/tab-mine.png",
+				"selectedIconPath": "static/images/tabbar/tab-mine-selected.png",
 				"text": "我的"
 			}
 		]
 	},
 	"condition": { //模式配置，仅开发期间生效
 		"current": 0, //当前激活的模式(list 的索引项)
-		"list": [
-			{
-				"name": "登录页面", //模式名称
-				"path": "pages/login/login", //启动页面，必选
-				"query": "" //启动参数，在页面的onLoad函数里面得到
-			}
-		]
+		"list": [{
+			"name": "登录页面", //模式名称
+			"path": "pages/login/login", //启动页面，必选
+			"query": "" //启动参数，在页面的onLoad函数里面得到
+		}]
 	}
 }

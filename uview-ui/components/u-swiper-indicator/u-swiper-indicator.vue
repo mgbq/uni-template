@@ -57,7 +57,7 @@
 			lineStyle() {
 				let style = {}
 				style.width = uni.$u.addUnit(this.lineWidth)
-				style.transform = `translateX(${ this.current * this.lineWidth }px)`
+				style.transform = `translateX(${ uni.$u.addUnit(this.current * this.lineWidth) })`
 				style.backgroundColor = this.indicatorActiveColor
 				return style
 			},
@@ -73,7 +73,7 @@
 	}
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 	@import "../../libs/css/components.scss";
 
 	.u-swiper-indicator {

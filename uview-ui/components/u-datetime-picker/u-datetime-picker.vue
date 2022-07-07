@@ -4,7 +4,15 @@
 		:show="show"
 		:closeOnClickOverlay="closeOnClickOverlay"
 		:columns="columns"
+		:title="title"
+		:itemHeight="itemHeight"
+		:showToolbar="showToolbar"
+		:visibleItemCount="visibleItemCount"
 		:defaultIndex="innerDefaultIndex"
+		:cancelText="cancelText"
+		:confirmText="confirmText"
+		:cancelColor="cancelColor"
+		:confirmColor="confirmColor"
 		@close="close"
 		@cancel="cancel"
 		@confirm="confirm"
@@ -69,7 +77,7 @@
 		watch: {
 			show(newValue, oldValue) {
 				if (newValue) {
-					this.updateColumnValue(this.value)
+					this.updateColumnValue(this.innerValue)
 				}
 			},
 			propsChange() {
@@ -110,6 +118,23 @@
 					value: this.innerValue,
 					mode: this.mode
 				})
+				this.$emit('input', this.innerValue)
+			},
+			//用正则截取输出值,当出现多组数字时,抛出错误
+			intercept(e,type){
+				let judge = e.match(/\d+/g)
+				//判断是否掺杂数字
+				if(judge.length>1){
+					uni.$u.error("请勿在过滤或格式化函数时添加数字")
+					return 0
+				}else if(type&&judge[0].length==4){//判断是否是年份
+					return judge[0]
+				}else if(judge[0].length>2){
+					uni.$u.error("请勿在过滤或格式化函数时添加数字")
+					return 0
+				}else{
+					return judge[0]
+				}
 			},
 			// 列发生变化时触发
 			change(e) {
@@ -117,15 +142,15 @@
 				let selectValue = ''
 				if(this.mode === 'time') {
 					// 根据value各列索引，从各列数组中，取出当前时间的选中值
-					selectValue = `${values[0][value[0]]}:${values[1][indexs[1]]}`
+					selectValue = `${this.intercept(values[0][indexs[0]])}:${this.intercept(values[1][indexs[1]])}`
 				} else {
 					// 将选择的值转为数值，比如'03'转为数值的3，'2019'转为数值的2019
-					const year = parseInt(values[0][indexs[0]])
-					const month = parseInt(values[1][indexs[1]])
-					let date = parseInt(values[2] ? values[2][indexs[2]] : 1)
+					const year = parseInt(this.intercept(values[0][indexs[0]],'year'))
+					const month = parseInt(this.intercept(values[1][indexs[1]]))
+					let date = parseInt(values[2] ? this.intercept(values[2][indexs[2]]) : 1)
 					let hour = 0, minute = 0
 					// 此月份的最大天数
-					const maxDate = dayjs(`${year}-${month}-${date}`).daysInMonth()
+					const maxDate = dayjs(`${year}-${month}`).daysInMonth()
 					// year-month模式下，date不会出现在列中，设置为1，为了符合后边需要减1的需求
 					if (this.mode === 'year-month') {
 					    date = 1
@@ -133,8 +158,8 @@
 					// 不允许超过maxDate值
 					date = Math.min(maxDate, date)
 					if (this.mode === 'datetime') {
-					    hour = parseInt(values[3][indexs[3]])
-					    minute = parseInt(values[4][indexs[4]])
+					    hour = parseInt(this.intercept(values[3][indexs[3]]))
+					    minute = parseInt(this.intercept(values[4][indexs[4]]))
 					}
 					// 转为时间模式
 					selectValue = Number(new Date(year, month - 1, date, hour, minute))
@@ -185,7 +210,7 @@
 				        values.push(formatter('day', padZero(dayjs(value).date())), formatter('hour', padZero(dayjs(value).hour())), formatter('minute', padZero(dayjs(value).minute())))
 				    }
 				}
-				
+
 				// 根据当前各列的所有值，从各列默认值中找到默认值在各列中的索引
 				const indexs = this.columns.map((column, index) => {
 					// 通过取大值，可以保证不会出现找不到索引的-1情况
@@ -228,7 +253,7 @@
 					value = this.minDate
 				} else if (!isDateMode && !value) {
 					// 如果是时间类型，而又没有默认值的话，就用最小时间
-					value = `${uni.$u.padZero(this.minHour)}:uni.$u.padZero(this.minMinute)}`
+					value = `${uni.$u.padZero(this.minHour)}:${uni.$u.padZero(this.minMinute)}`
 				}
 				// 时间类型
 				if (!isDateMode) {
@@ -330,6 +355,6 @@
 	}
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 	@import '../../libs/css/components.scss';
 </style>

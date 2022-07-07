@@ -71,6 +71,12 @@
 						path: '/pages/tabbar/home',
 					});
 				});
+				// 以下是云函数示例
+				// this.$cloudFun.app.call('member/loginByWeixin', this.login).then(res => {
+				// 	if (res.code === 0) {
+				// 		console.log('登录成功')
+				// 	}
+				// });
 			}
 		}
 	}

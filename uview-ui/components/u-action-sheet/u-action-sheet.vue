@@ -3,8 +3,7 @@
 	<u-popup
 	    :show="show"
 	    mode="bottom"
-	    @close="close"
-	    :closeOnClickOverlay="closeOnClickOverlay"
+	    @close="closeHandler"
 	    :safeAreaInsetBottom="safeAreaInsetBottom"
 	    :round="round"
 	>
@@ -100,7 +99,7 @@
 				    :hover-stay-time="150"
 				    v-if="cancelText"
 				    class="u-action-sheet__cancel-text"
-				    @tap="close"
+				    @tap="cancel"
 				>{{cancelText}}</text>
 			</view>
 		</view>
@@ -125,7 +124,7 @@
 	 * @property {Boolean}			safeAreaInsetBottom	处理底部安全区 （默认 true ）
 	 * @property {String}			openType			小程序的打开方式 (contact | launchApp | getUserInfo | openSetting ｜getPhoneNumber ｜error )
 	 * @property {Boolean}			closeOnClickOverlay	点击遮罩是否允许关闭  (默认 true )
-	 * @property {Boolean}			round				是否显示圆角  (默认 false )
+	 * @property {Number|String}	round				圆角值，默认无圆角  (默认 0 )
 	 * @property {String}			lang				指定返回用户信息的语言，zh_CN 简体中文，zh_TW 繁体中文，en 英文
 	 * @property {String}			sessionFrom			会话来源，openType="contact"时有效
 	 * @property {String}			sendMessageTitle	会话内消息卡片标题，openType="contact"时有效
@@ -167,11 +166,15 @@
 			},
 		},
 		methods: {
-			close() {
+			closeHandler() {
 				// 允许点击遮罩关闭时，才发出close事件
 				if(this.closeOnClickOverlay) {
 					this.$emit('close')
 				}
+			},
+			// 点击取消按钮
+			cancel() {
+				this.$emit('close')
 			},
 			selectHandler(index) {
 				const item = this.actions[index]
@@ -186,7 +189,7 @@
 	}
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 	@import "../../libs/css/components.scss";
 	$u-action-sheet-reset-button-width:100% !default;
 	$u-action-sheet-title-font-size: 16px !default;

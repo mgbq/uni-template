@@ -24,7 +24,7 @@
 					class="u-notify__warpper__text"
 					:style="{
 						fontSize: $u.addUnit(tmpConfig.fontSize),
-						color: tmpConfig.color 
+						color: tmpConfig.color
 					}"
 				>{{ tmpConfig.message }}</text>
 			</view>
@@ -37,7 +37,7 @@
 	/**
 	 * notify 顶部提示
 	 * @description 该组件一般用于页面顶部向下滑出一个提示，尔后自动收起的场景
-	 * @tutorial 
+	 * @tutorial
 	 * @property {String | Number}	top					到顶部的距离 ( 默认 0 )
 	 * @property {String}			type				主题，primary，success，warning，error ( 默认 'primary' )
 	 * @property {String}			color				字体颜色 ( 默认 '#ffffff' )
@@ -97,7 +97,8 @@
 					// 让其出现在导航栏底部
 					position: 'fixed',
 					left: 0,
-					right: 0
+					right: 0,
+					zIndex: 10076
 				}
 				return style
 			},
@@ -134,7 +135,7 @@
 		methods: {
 			show(options) {
 				// 不将结果合并到this.config变量，避免多次调用u-toast，前后的配置造成混乱
-				this.tmpConfig = this.$u.deepMerge(this.config, options)
+				this.tmpConfig = uni.$u.deepMerge(this.config, options)
 				// 任何定时器初始化之前，都要执行清除操作，否则可能会造成混乱
 				this.clearTimer()
 				this.open = true
@@ -153,7 +154,7 @@
 				this.clearTimer()
 			},
 			clearTimer() {
-				this.isShow = false
+				this.open = false
 				// 清除定时器
 				clearTimeout(this.timer)
 				this.timer = null
@@ -165,7 +166,7 @@
 	}
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 	@import "../../libs/css/components.scss";
 
 	$u-notify-padding: 8px 10px !default;

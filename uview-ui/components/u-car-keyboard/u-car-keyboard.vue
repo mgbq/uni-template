@@ -129,7 +129,7 @@
 				];
 				let tmp = [];
 				// 打乱顺序
-				if (this.random) data = this.$u.randomArray(data);
+				if (this.random) data = uni.$u.randomArray(data);
 				// 切割成二维数组
 				tmp[0] = data.slice(0, 10);
 				tmp[1] = data.slice(10, 20);
@@ -177,7 +177,7 @@
 					'M'
 				];
 				let tmp = [];
-				if (this.random) data = this.$u.randomArray(data);
+				if (this.random) data = uni.$u.randomArray(data);
 				tmp[0] = data.slice(0, 10);
 				tmp[1] = data.slice(10, 20);
 				tmp[2] = data.slice(20, 30);
@@ -217,7 +217,7 @@
 	};
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 	@import "../../libs/css/components.scss";
 	$u-car-keyboard-background-color: rgb(224, 228, 230) !default;
 	$u-car-keyboard-padding:6px 0 6px !default;

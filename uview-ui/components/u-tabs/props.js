@@ -35,6 +35,11 @@ export default {
             type: [String, Number],
             default: uni.$u.props.tabs.lineHeight
         },
+        // 滑块背景显示大小，当滑块背景设置为图片时使用
+        lineBgSize: {
+            type: String,
+            default: uni.$u.props.tabs.lineBgSize
+        },
         // 菜单item的样式
         itemStyle: {
             type: [String, Object],
@@ -44,6 +49,16 @@ export default {
         scrollable: {
             type: Boolean,
             default: uni.$u.props.tabs.scrollable
-        }
+        },
+		// 当前选中标签的索引
+		current: {
+			type: [Number, String],
+			default: uni.$u.props.tabs.current
+		},
+		// 默认读取的键名
+		keyName: {
+			type: String,
+			default: uni.$u.props.tabs.keyName
+		}
     }
 }

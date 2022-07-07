@@ -53,8 +53,8 @@
 			colStyle() {
 				const style = {
 					// 这里写成"padding: 0 10px"的形式是因为nvue的需要
-					paddingLeft: uni.$u.addUnit(Number(this.parentData.gutter)/2),
-					paddingRight: uni.$u.addUnit(Number(this.parentData.gutter)/2),
+					paddingLeft: uni.$u.addUnit(uni.$u.getPx(this.parentData.gutter)/2),
+					paddingRight: uni.$u.addUnit(uni.$u.getPx(this.parentData.gutter)/2),
 					alignItems: this.uAlignItem,
 					justifyContent: this.uJustify,
 					textAlign: this.textAlign,
@@ -91,11 +91,14 @@
 	}
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 	@import "../../libs/css/components.scss";
 
 	.u-col {
 		padding: 0;
+		/* #ifndef APP-NVUE */
+		box-sizing:border-box;
+		/* #endif */
 		/* #ifdef MP */
 		display: block;
 		/* #endif */

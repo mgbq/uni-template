@@ -201,7 +201,7 @@
 	}
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 	@import "../../libs/css/components.scss";
 
 	.u-steps-item {
@@ -215,6 +215,7 @@
 		}
 
 		&--column {
+			position: relative;
 			flex-direction: row;
 			justify-content: flex-start;
 			padding-bottom: 5px;
@@ -257,6 +258,7 @@
 				border-radius: 100px;
 				border-width: 1px;
 				border-color: $u-tips-color;
+				border-style: solid;
 				@include flex(row);
 				align-items: center;
 				justify-content: center;

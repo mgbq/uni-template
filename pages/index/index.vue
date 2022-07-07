@@ -11,15 +11,17 @@
 	export default {
 		data() {
 			return {
-				
 
 			};
 		},
 		onLoad(parms) {
-			
+			let shareInfo = {}
+			shareInfo.title = '快速开发框架'
+			shareInfo.path = 'pages/index/index'
+			this.setShareInfo(shareInfo)
 		},
 		onUnload() {
-			
+
 		},
 		methods: {
 

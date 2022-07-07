@@ -6,7 +6,8 @@
 		>
 			<view
 				class="u-toast__content"
-				:class="['u-type-' + tmpConfig.type, tmpConfig.type === 'loading' && 'u-toast__content--loading']"
+				:style="[contentStyle]"
+				:class="['u-type-' + tmpConfig.type, (tmpConfig.type === 'loading' || tmpConfig.loading) ?  'u-toast__content--loading' : '']"
 			>
 				<u-loading-icon
 					v-if="tmpConfig.type === 'loading'"
@@ -23,7 +24,7 @@
 					:customStyle="iconStyle"
 				></u-icon>
 				<u-gap
-					v-if="tmpConfig.type === 'loading'"
+					v-if="tmpConfig.type === 'loading' || tmpConfig.loading"
 					height="12"
 					bgColor="transparent"
 				></u-gap>
@@ -44,7 +45,7 @@
 	 * @tutorial https://www.uviewui.com/components/toast.html
 	 * @property {String | Number}	zIndex		toast展示时的zIndex值 (默认 10090 )
 	 * @property {Boolean}			loading		是否加载中 （默认 false ）
-	 * @property {String | Number}	text		显示的文字内容
+	 * @property {String | Number}	message		显示的文字内容
 	 * @property {String}			icon		图标，或者绝对路径的图片
 	 * @property {String}			type		主题类型 （默认 default）
 	 * @property {Boolean}			show		是否显示该组件 （默认 false）
@@ -54,7 +55,7 @@
 	 * @property {String | Number}  duration	展示时间，单位ms （默认 2000 ）
 	 * @property {Boolean}			isTab		是否返回的为tab页面 （默认 false ）
 	 * @property {String}			url			toast消失后是否跳转页面，有则跳转，优先级高于back参数 
-	 * @property {Function}			callback	执行完后的回调函数 
+	 * @property {Function}			complete	执行完后的回调函数 
 	 * @property {Boolean}			back		结束toast是否自动返回上一页 （默认 false ）
 	 * @property {Object}			customStyle	组件的样式，对象形式
 	 * @event {Function} show 显示toast，如需一进入页面就显示toast，请在onReady生命周期调用
@@ -83,8 +84,11 @@
 		computed: {
 			iconName() {
 				// 只有不为none，并且type为error|warning|succes|info时候，才显示图标
+				if(!this.tmpConfig.icon || this.tmpConfig.icon == 'none') {
+					return '';
+				}
 				if (['error', 'warning', 'success', 'primary'].includes(this.tmpConfig.type)) {
-					return this.$u.type2icon(this.tmpConfig.type)
+					return uni.$u.type2icon(this.tmpConfig.type)
 				} else {
 					return ''
 				}
@@ -119,6 +123,19 @@
 					color = uni.$u.hexToRgb(uni.$u.color[this.tmpConfig.type])
 				}
 				return color
+			},
+			// 内容盒子的样式
+			contentStyle() {
+				const windowHeight = uni.$u.sys().windowHeight, style = {}
+				let value = 0
+				// 根据top和bottom，对Y轴进行窗体高度的百分比偏移
+				if(this.tmpConfig.position === 'top') {
+					value = - windowHeight * 0.25
+				} else if(this.tmpConfig.position === 'bottom') {
+					value = windowHeight * 0.25
+				}
+				style.transform = `translateY(${value}px)`
+				return style
 			}
 		},
 		created() {
@@ -134,7 +151,7 @@
 			// 显示toast组件，由父组件通过this.$refs.xxx.show(options)形式调用
 			show(options) {
 				// 不将结果合并到this.config变量，避免多次调用u-toast，前后的配置造成混乱
-				this.tmpConfig = this.$u.deepMerge(this.config, options)
+				this.tmpConfig = uni.$u.deepMerge(this.config, options)
 				// 清除定时器
 				this.clearTimer()
 				this.isShow = true
@@ -162,7 +179,7 @@
 	}
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 	@import "../../libs/css/components.scss";
 
 	$u-toast-color:#fff !default;
@@ -174,13 +191,6 @@
 	$u-toast-content-text-color:#fff !default;
 	$u-toast-content-text-font-size:15px !default;
 	$u-toast-u-icon:10rpx !default;
-	$u-toast-u-position-center-top:50% !default;
-	$u-toast-u-position-center-left:50% !default;
-	$u-toast-u-position-center-max-width:80% !default;
-	$u-toast-u-position-top-left:50% !default;
-	$u-toast-u-position-top-top:20% !default;
-	$u-toast-u-position-bottom-left:50% !default;
-	$u-toast-u-position-bottom-bottom:20% !default;
 	$u-toast-u-type-primary-color:$u-primary !default;
 	$u-toast-u-type-primary-background-color:#ecf5ff !default;
 	$u-toast-u-type-primary-border-color:rgb(215, 234, 254) !default;
@@ -244,24 +254,6 @@
 				}
 			}
 		}
-	}
-
-	.u-position-center {
-		top: $u-toast-u-position-center-top;
-		left: $u-toast-u-position-center-left;
-		transform: translate(-50%, -50%);
-	}
-
-	.u-position-top {
-		left: $u-toast-u-position-top-left;
-		top: $u-toast-u-position-top-top;
-		transform: translate(-50%, -50%);
-	}
-
-	.u-position-bottom {
-		left: $u-toast-u-position-bottom-left;
-		bottom: $u-toast-u-position-bottom-bottom;
-		transform: translate(-50%, -50%);
 	}
 
 	.u-type-primary {

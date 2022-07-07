@@ -14,9 +14,6 @@
 					<view
 						class="u-tabs__wrapper__nav"
 						ref="u-tabs__wrapper__nav"
-						:style="[{
-							flex: scrollable ? 0 : 1
-						}]"
 					>
 						<view
 							class="u-tabs__wrapper__nav__item"
@@ -24,26 +21,26 @@
 							:key="index"
 							@tap="clickHandler(item, index)"
 							:ref="`u-tabs__wrapper__nav__item-${index}`"
-							:style="[$u.addStyle(itemStyle)]"
+							:style="[$u.addStyle(itemStyle), {flex: scrollable ? '' : 1}]"
 							:class="[`u-tabs__wrapper__nav__item-${index}`, item.disabled && 'u-tabs__wrapper__nav__item--disabled']"
 						>
 							<text
-								:class="['ellipsis' && 'u-line-1', item.disabled && 'u-tabs__wrapper__nav__item__text--disabled']"
+								:class="[item.disabled && 'u-tabs__wrapper__nav__item__text--disabled']"
 								class="u-tabs__wrapper__nav__item__text"
 								:style="[textStyle(index)]"
-							>{{ item.name }}</text>
+							>{{ item[keyName] }}</text>
 							<u-badge
 								:show="!!(item.badge && (item.badge.show || item.badge.isDot || item.badge.value))"
-								:isDot="item.badge && item.badge.isDot || $u.props.badge.isDot"
-								:value="item.badge && item.badge.value || $u.props.badge.value"
-								:max="item.badge && item.badge.max || $u.props.badge.max"
-								:type="item.badge && item.badge.type || $u.props.badge.type"
-								:showZero="item.badge && item.badge.showZero || $u.props.badge.showZero"
-								:bgColor="item.badge && item.badge.bgColor || $u.props.badge.bgColor"
-								:color="item.badge && item.badge.color || $u.props.badge.color"
-								:shape="item.badge && item.badge.shape || $u.props.badge.shape"
-								:numberType="item.badge && item.badge.numberType || $u.props.badge.numberType"
-								:inverted="item.badge && item.badge.inverted || $u.props.badge.inverted"
+								:isDot="item.badge && item.badge.isDot || propsBadge.isDot"
+								:value="item.badge && item.badge.value || propsBadge.value"
+								:max="item.badge && item.badge.max || propsBadge.max"
+								:type="item.badge && item.badge.type || propsBadge.type"
+								:showZero="item.badge && item.badge.showZero || propsBadge.showZero"
+								:bgColor="item.badge && item.badge.bgColor || propsBadge.bgColor"
+								:color="item.badge && item.badge.color || propsBadge.color"
+								:shape="item.badge && item.badge.shape || propsBadge.shape"
+								:numberType="item.badge && item.badge.numberType || propsBadge.numberType"
+								:inverted="item.badge && item.badge.inverted || propsBadge.inverted"
 								customStyle="margin-left: 4px;"
 							></u-badge>
 						</view>
@@ -52,9 +49,10 @@
 							class="u-tabs__wrapper__nav__line"
 							ref="u-tabs__wrapper__nav__line"
 							:style="[{
-									width: $u.addUnit(this.lineWidth),
-									height: $u.addUnit(this.lineHeight),
-									backgroundColor: this.lineColor
+									width: $u.addUnit(lineWidth),
+									height: $u.addUnit(lineHeight),
+									background: lineColor,
+									backgroundSize: lineBgSize,
 								}]"
 						>
 							<!-- #endif -->
@@ -63,11 +61,12 @@
 								class="u-tabs__wrapper__nav__line"
 								ref="u-tabs__wrapper__nav__line"
 								:style="[{
-										width: $u.addUnit(this.lineWidth),
+										width: $u.addUnit(lineWidth),
 										transform: `translate(${lineOffsetLeft}px)`,
 										transitionDuration: `${firstTime ? 0 : duration}ms`,
-										height: $u.addUnit(this.lineHeight),
-										backgroundColor: this.lineColor
+										height: $u.addUnit(lineHeight),
+										background: lineColor,
+										backgroundSize: lineBgSize,
 									}]"
 							>
 								<!-- #endif -->
@@ -92,7 +91,9 @@
 	 * @tutorial https://www.uviewui.com/components/tabs.html
 	 * @property {String | Number}	duration			滑块移动一次所需的时间，单位秒（默认 200 ）
 	 * @property {String | Number}	swierWidth			swiper的宽度（默认 '750rpx' ）
-	 * @event {Function(index)} change 点击标签时触发 index: 点击了第几个tab，索引从0开始
+	 * @property {String}	keyName	 从`list`元素对象中读取的键名（默认 'name' ）
+	 * @event {Function(index)} change 标签改变时触发 index: 点击了第几个tab，索引从0开始
+	 * @event {Function(index)} click 点击标签时触发 index: 点击了第几个tab，索引从0开始
 	 * @example <u-tabs :list="list" :is-scroll="false" :current="current" @change="change"></u-tabs>
 	 */
 	export default {
@@ -107,13 +108,28 @@
 				tabsRect: {
 					left: 0
 				},
-				current: 0,
+				innerCurrent: 0,
 				moving: false,
 			}
 		},
 		watch: {
-			current(newValue, oldValue) {
-				// this.setLineLeft(newValue)
+			current: {
+				immediate: true,
+				handler (newValue, oldValue) {
+					// 内外部值不相等时，才尝试移动滑块
+					if (newValue !== this.innerCurrent) {
+						this.innerCurrent = newValue
+						this.$nextTick(() => {
+							this.resize()
+						})
+					}
+				}
+			},
+			// list变化时，重新渲染list各项信息
+			list() {
+				this.$nextTick(() => {
+					this.resize()
+				})
 			}
 		},
 		computed: {
@@ -121,14 +137,18 @@
 				return index => {
 					const style = {}
 					// 取当期是否激活的样式
-					const customeStyle = index === this.current ? uni.$u.addStyle(this.activeStyle) : uni.$u.addStyle(
-						this.inactiveStyle)
+					const customeStyle = index === this.innerCurrent ? uni.$u.addStyle(this.activeStyle) : uni.$u
+						.addStyle(
+							this.inactiveStyle)
 					// 如果当前菜单被禁用，则加上对应颜色，需要在此做处理，是因为nvue下，无法在style样式中通过!import覆盖标签的内联样式
 					if (this.list[index].disabled) {
 						style.color = '#c8c9cc'
 					}
 					return uni.$u.deepMerge(customeStyle, style)
 				}
+			},
+			propsBadge() {
+				return uni.$u.props.badge
 			}
 		},
 		async mounted() {
@@ -136,16 +156,17 @@
 		},
 		methods: {
 			setLineLeft() {
-				const tabItem = this.list[this.current];
+				const tabItem = this.list[this.innerCurrent];
 				if (!tabItem) {
 					return;
 				}
 				// 获取滑块该移动的位置
 				let lineOffsetLeft = this.list
-					.slice(0, this.current)
+					.slice(0, this.innerCurrent)
 					.reduce((total, curr) => total + curr.rect.width, 0);
-				this.lineOffsetLeft = lineOffsetLeft + (tabItem.rect.width - this.lineWidth) / 2
-
+                // 获取下划线的数值px表示法
+				const lineWidth = uni.$u.getPx(this.lineWidth);
+				this.lineOffsetLeft = lineOffsetLeft + (tabItem.rect.width - lineWidth) / 2
 				// #ifdef APP-NVUE
 				// 第一次移动滑块，无需过渡时间
 				this.animation(this.lineOffsetLeft, this.firstTime ? 0 : parseInt(this.duration))
@@ -173,11 +194,19 @@
 			},
 			// 点击某一个标签
 			clickHandler(item, index) {
+				// 因为标签可能为disabled状态，所以click是一定会发出的，但是change事件是需要可用的状态才发出
+				this.$emit('click', {
+					...item,
+					index
+				})
 				// 如果disabled状态，返回
 				if (item.disabled) return
-				this.current = index
+				this.innerCurrent = index
 				this.resize()
-				this.$emit('click', {...item, index})
+				this.$emit('change', {
+					...item,
+					index
+				})
 			},
 			init() {
 				uni.$u.sleep().then(() => {
@@ -186,10 +215,10 @@
 			},
 			setScrollLeft() {
 				// 当前活动tab的布局信息，有tab菜单的width和left(为元素左边界到父元素左边界的距离)等信息
-				const tabRect = this.list[this.current]
+				const tabRect = this.list[this.innerCurrent]
 				// 累加得到当前item到左边的距离
 				const offsetLeft = this.list
-					.slice(0, this.current)
+					.slice(0, this.innerCurrent)
 					.reduce((total, curr) => {
 						return total + curr.rect.width
 					}, 0)
@@ -204,6 +233,10 @@
 			},
 			// 获取所有标签的尺寸
 			resize() {
+				// 如果不存在list，则不处理
+				if(this.list.length === 0) {
+					return
+				}
 				Promise.all([this.getTabsRect(), this.getAllItemRect()]).then(([tabsRect, itemRect = []]) => {
 					this.tabsRect = tabsRect
 					this.scrollViewWidth = 0
@@ -236,7 +269,7 @@
 			queryRect(el, item) {
 				// #ifndef APP-NVUE
 				// $uGetRect为uView自带的节点查询简化方法，详见文档介绍：https://www.uviewui.com/js/getRect.html
-				// 组件内部一般用this.$uGetRect，对外的为this.$u.getRect，二者功能一致，名称不同
+				// 组件内部一般用this.$uGetRect，对外的为uni.$u.getRect，二者功能一致，名称不同
 				return new Promise(resolve => {
 					this.$uGetRect(`.${el}`).then(size => {
 						resolve(size)
@@ -244,7 +277,7 @@
 				})
 				// #endif
 
-				// #ifdef APP-NVUE 
+				// #ifdef APP-NVUE
 				// nvue下，使用dom模块查询元素高度
 				// 返回一个promise，让调用此方法的主体能使用then回调
 				return new Promise(resolve => {
@@ -258,7 +291,7 @@
 	}
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 	@import "../../libs/css/components.scss";
 
 	.u-tabs {
@@ -281,13 +314,13 @@
 
 			&__nav {
 				@include flex;
+				position: relative;
 
 				&__item {
 					padding: 0 11px;
 					@include flex;
 					align-items: center;
 					justify-content: center;
-					flex: 1;
 
 					&--disabled {
 						/* #ifndef APP-NVUE */
@@ -307,7 +340,7 @@
 
 				&__line {
 					height: 3px;
-					background-color: $u-primary;
+					background: $u-primary;
 					width: 30px;
 					position: absolute;
 					bottom: 2px;

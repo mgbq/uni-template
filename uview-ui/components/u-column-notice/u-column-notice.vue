@@ -22,6 +22,7 @@
 			:interval="duration"
 			:autoplay="true"
 			class="u-notice__swiper"
+			@change="noticeChange"
 		>
 			<swiper-item
 				v-for="(item, index) in text"
@@ -80,7 +81,7 @@
 				immediate: true,
 				handler(newValue, oldValue) {
 					if(!uni.$u.test.array(newValue)) {
-						uni.$u.error('column模式要求text参数为数组')
+						uni.$u.error('noticebar组件direction为column时，要求text参数为数组形式')
 					}
 				}
 			}
@@ -101,13 +102,16 @@
 		},
 		data() {
 			return {
-
+				index:0
 			}
 		},
 		methods: {
+			noticeChange(e){
+				this.index = e.detail.current
+			},
 			// 点击通告栏
-			clickHandler(index) {
-				this.$emit('click', index)
+			clickHandler() {
+				this.$emit('click', this.index)
 			},
 			// 点击关闭按钮
 			close() {
@@ -117,7 +121,7 @@
 	};
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 	@import "../../libs/css/components.scss";
 
 	.u-notice {

@@ -23,6 +23,8 @@
 - 配置Vuex(store)
 - 无关系组件间的通信。
 - 使用easycom模式，让您无需引入组件即可直接使用（按需加载）
+- 微信小程序分享功能
+- unicloud云函数封装请求
 - 进可攻，退可守的架构
 - 后面持续更新
 
@@ -40,13 +42,13 @@
 通过 vue.config.js 配合[uni-read-pages](https://github.com/SilurianYang/uni-read-pages)，可以随心所欲的读取 pages.json 下的所有配置
 
 
-## 2、Request封装
- 适用于一项目多域名请求、七牛云图片上传、本地服务器图片上传、支持 Promise.
+## 2、Request封装和unicloud云函数封装
+ [uni-ajax](https://uniajax.ponjs.com/) 基于 promise，轻量、灵活的uni-app 网络请求库
 
 ## 3、api集中管理
 api集中管理； 为简化逻辑代码量整洁的原则，像调用函数一样调用api，做到代码分离，在apis目录统一创建api函数
 
-## 4、小程序更新提示代码，配置分包，等必备代码
+## 4、小程序更新提示代码，配置分包，分享功能等必备代码
 sub目录分包管理 由于微信小程序的限制，上传发布机制总包大小不能大于2m，所以项目若超出该限制，要在page.json中做分包处理，分包处理的配置与pages目录保持一致，封装更新提示代码
 
 ## 5、配置vuex
@@ -151,8 +153,7 @@ B组件 触发($emit)
 
 ## 常见问题
 #### 1 运行不了，控制台报错，请安装依赖
-
-```npm install ```
+`HBuilderX导入的项目带有中文，必须使用cnpm install 安装依赖` [cnpm安装依赖](https://blog.csdn.net/qq_32340877/article/details/125364934)
 
 
 ## 后面持续更新。。。。
@@ -160,13 +161,16 @@ B组件 触发($emit)
 如果你导入源码或者学习过程中有任何问题，都可以加我qq：2214904953。大家一起学习，一起进步。 
 前端学习大佬群493671066，美女多多。老司机快上车，来不及解释了。
 
+## 承接毕业设计网站小程序App开发，价格美丽 QQ 2214904953
+
 #### 作者相关文章
+
+[万能节日头像助手](https://nxmin.blog.csdn.net/article/details/124525217)
 
 [反编译获取任何微信小程序源码——看这篇就够了](https://blog.csdn.net/qq_32340877/article/details/110993362) 
 
-[零基础搭建获利的美团饿了么优惠券CPS小程序(附源码)](https://blog.csdn.net/qq_32340877/article/details/113478901)
+[资源变现资讯、新闻、自媒体、博客小程序（可引流，开通流量主，带pc后台管理）)](https://nxmin.blog.csdn.net/article/details/125260848)
 
-[5分钟实现微信云小程序支付功能（含源码）](https://blog.csdn.net/qq_32340877/article/details/111595124)
 
 
 

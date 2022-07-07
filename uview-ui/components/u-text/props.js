@@ -46,11 +46,6 @@ export default {
             type: Boolean,
             default: uni.$u.props.text.call
         },
-        // 是否对mode=phone|name类型文本进行脱敏，用*号替换部分文本
-        encrypt: {
-            type: Boolean,
-            default: uni.$u.props.text.encrypt
-        },
         // 小程序的打开方式
         openType: {
             type: String,
@@ -85,11 +80,6 @@ export default {
         iconStyle: {
             type: [Object, String],
             default: uni.$u.props.text.iconStyle
-        },
-        // 是否显示金额的千分位，mode=price时有效
-        precision: {
-            type: Boolean,
-            default: uni.$u.props.text.precision
         },
         // 文字装饰，下划线，中划线等，可选值 none|underline|line-through
         decoration: {

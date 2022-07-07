@@ -1,0 +1,10 @@
+{
+  "name": "app",
+  "dependencies": {
+    "uni-cloud-router": "file:../../../uni_modules/uni-cloud-router/uniCloud/cloudfunctions/common/uni-cloud-router",
+	"uni-id": "file:../../../uni_modules/uni-id/uniCloud/cloudfunctions/common/uni-id"
+  },
+  "extensions": {
+    "uni-cloud-jql": {}
+  }
+}

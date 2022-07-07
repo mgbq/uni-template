@@ -21,9 +21,12 @@ export default {
         }),
         lineWidth: 20,
         lineHeight: 3,
+        lineBgSize: 'cover',
         itemStyle: () => ({
             height: '44px'
         }),
-        scrollable: true
+        scrollable: true,
+		current: 0,
+		keyName: 'name'
     }
 }

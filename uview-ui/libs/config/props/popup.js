@@ -14,7 +14,6 @@ export default {
         overlay: true,
         mode: 'bottom',
         duration: 300,
-        borderRadius: 0,
         closeable: false,
         overlayStyle: () => {},
         closeOnClickOverlay: true,
@@ -22,7 +21,7 @@ export default {
         safeAreaInsetBottom: true,
         safeAreaInsetTop: false,
         closeIconPos: 'top-right',
-        round: false,
+        round: 0,
         zoom: true,
         bgColor: '',
         overlayOpacity: 0.5

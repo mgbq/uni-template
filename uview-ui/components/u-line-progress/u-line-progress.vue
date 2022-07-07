@@ -102,7 +102,7 @@
 	}
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 	@import "../../libs/css/components.scss";
 
 	.u-line-progress {
@@ -110,6 +110,8 @@
 		position: relative;
 		@include flex(row);
 		flex: 1;
+		overflow: hidden;
+		border-radius: 100px;
 
 		&__background {
 			background-color: #ececec;

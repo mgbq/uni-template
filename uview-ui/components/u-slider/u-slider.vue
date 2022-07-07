@@ -13,6 +13,7 @@
 			:blockSize="$u.getPx(blockSize)"
 			:blockColor="blockColor"
 			:showValue="showValue"
+			:disabled="disabled"
 			@changing="changingHandler"
 			@change="changeHandler"
 		></slider>
@@ -49,6 +50,6 @@
 	}
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 	@import "../../libs/css/components.scss";
 </style>

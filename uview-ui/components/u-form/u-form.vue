@@ -15,7 +15,7 @@
 	 * @tutorial https://www.uviewui.com/components/form.html
 	 * @property {Object}						model			当前form的需要验证字段的集合
 	 * @property {Object | Function | Array}	rules			验证规则
-	 * @property {Array}						errorType		错误的提示方式，数组形式，见上方说明 ( 默认 ['message', 'toast'] )
+	 * @property {String}						errorType		错误的提示方式，见上方说明 ( 默认 message )
 	 * @property {Boolean}						borderBottom	是否显示表单域的下划线边框   ( 默认 true ）
 	 * @property {String}						labelPosition	表单域提示文字的位置，left-左侧，top-上方 ( 默认 'left' ）
 	 * @property {String | Number}				labelWidth		提示文字的宽度，单位px  ( 默认 45 ）
@@ -90,6 +90,10 @@
 			setRules(rules) {
 				// 判断是否有规则
 				if (Object.keys(rules).length === 0) return;
+				if (process.env.NODE_ENV === 'development' && Object.keys(this.model).length === 0) {
+					uni.$u.error('设置rules，model必须设置！如果已经设置，请刷新页面。');
+					return;
+				};
 				this.formRules = rules;
 				// 重新将规则赋予Validator
 				this.validator = new Schema(rules);
@@ -112,7 +116,7 @@
 				props = [].concat(props);
 				this.children.map((child) => {
 					// 如果u-form-item的prop在props数组中，则清除对应的校验结果信息
-					if (props.includes(child.props)) {
+					if (props[0] === undefined || props.includes(child.prop)) {
 						child.message = null;
 					}
 				});
@@ -178,6 +182,11 @@
 			},
 			// 校验全部数据
 			validate(callback) {
+				// 开发环境才提示，生产环境不会提示
+				if (process.env.NODE_ENV === 'development' && Object.keys(this.formRules).length === 0) {
+					uni.$u.error('未设置rules，请看文档说明！如果已经设置，请刷新页面。');
+					return;
+				}
 				return new Promise((resolve, reject) => {
 					// $nextTick是必须的，否则model的变更，可能会延后于validate方法
 					this.$nextTick(() => {
@@ -186,7 +195,13 @@
 							(item) => item.prop
 						);
 						this.validateField(formItemProps, (errors) => {
-							errors.length ? reject(errors) : resolve(true);
+							if(errors.length) {
+								// 如果错误提示方式为toast，则进行提示
+								this.errorType === 'toast' && uni.$u.toast(errors[0].message)
+								reject(errors)
+							} else {
+								resolve(true)
+							}
 						});
 					});
 				});
@@ -195,5 +210,5 @@
 	};
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 </style>

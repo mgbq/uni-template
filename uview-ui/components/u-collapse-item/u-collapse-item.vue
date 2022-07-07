@@ -14,22 +14,18 @@
 		>
 			<!-- #ifndef MP-WEIXIN -->
 			<!-- 微信小程序不支持，因为微信中不支持 <slot name="title" slot="title" />的写法 -->
-			<slot
-				name="title"
-				slot="title"
-			/>
-			<slot
-				name="icon"
-				slot="icon"
-			/>
-			<slot
-				name="value"
-				slot="value"
-			/>
-			<slot
-				name="right-icon"
-				slot="right-icon"
-			/>
+			<template slot="title">
+				<slot name="title"></slot>
+			</template>
+			<template slot="icon">
+				<slot name="icon"></slot>
+			</template>
+			<template slot="value">
+				<slot name="value"></slot>
+			</template>
+			<template slot="right-icon">
+				<slot name="right-icon"></slot>
+			</template>
 			<!-- #endif -->
 		</u-cell>
 		<view
@@ -187,7 +183,7 @@
 			queryRect() {
 				// #ifndef APP-NVUE
 				// $uGetRect为uView自带的节点查询简化方法，详见文档介绍：https://www.uviewui.com/js/getRect.html
-				// 组件内部一般用this.$uGetRect，对外的为this.$u.getRect，二者功能一致，名称不同
+				// 组件内部一般用this.$uGetRect，对外的为uni.$u.getRect，二者功能一致，名称不同
 				return new Promise(resolve => {
 					this.$uGetRect(`#${this.elId}`).then(size => {
 						resolve(size)
@@ -209,7 +205,7 @@
 	};
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 	@import "../../libs/css/components.scss";
 
 	.u-collapse-item {

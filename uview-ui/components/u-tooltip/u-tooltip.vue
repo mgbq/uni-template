@@ -64,11 +64,10 @@
 							v-if="showCopy && buttons.length > 0"
 							length="18"
 						></u-line>
-						<template v-for="(item , index) in buttons">
+						<block v-for="(item , index) in buttons" :key="index">
 							<view
 								class="u-tooltip__wrapper__popup__list__btn"
 								hover-class="u-tooltip__wrapper__popup__list__btn--hover"
-								:key="index"
 							>
 								<text
 									class="u-tooltip__wrapper__popup__list__btn__text"
@@ -80,9 +79,8 @@
 								color="#8d8e90"
 								v-if="index < buttons.length - 1"
 								length="18"
-								:key="index"
 							></u-line>
-						</template>
+						</block>
 					</view>
 				</view>
 			</u-transition>
@@ -218,7 +216,7 @@
 			queryRect(ref) {
 				// #ifndef APP-NVUE
 				// $uGetRect为uView自带的节点查询简化方法，详见文档介绍：https://www.uviewui.com/js/getRect.html
-				// 组件内部一般用this.$uGetRect，对外的为this.$u.getRect，二者功能一致，名称不同
+				// 组件内部一般用this.$uGetRect，对外的为uni.$u.getRect，二者功能一致，名称不同
 				return new Promise(resolve => {
 					this.$uGetRect(`#${ref}`).then(size => {
 						resolve(size)
@@ -299,7 +297,7 @@
 	}
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 	@import "../../libs/css/components.scss";
 
 	.u-tooltip {

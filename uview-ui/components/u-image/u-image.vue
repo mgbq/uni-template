@@ -29,7 +29,9 @@
 				class="u-image__loading"
 				:style="{
 					borderRadius: shape == 'circle' ? '50%' : $u.addUnit(radius),
-					backgroundColor: this.bgColor
+					backgroundColor: this.bgColor,
+					width: $u.addUnit(width),
+					height: $u.addUnit(height)
 				}"
 			>
 				<slot name="loading">
@@ -44,7 +46,9 @@
 				v-if="showError && isError && !loading"
 				class="u-image__error"
 				:style="{
-					borderRadius: shape == 'circle' ? '50%' : $u.addUnit(borderRadius)
+					borderRadius: shape == 'circle' ? '50%' : $u.addUnit(radius),
+					width: $u.addUnit(width),
+					height: $u.addUnit(height)
 				}"
 			>
 				<slot name="error">
@@ -113,9 +117,10 @@
 					if (!n) {
 						// 如果传入null或者''，或者false，或者undefined，标记为错误状态
 						this.isError = true
-						this.loading = false
+						
 					} else {
-						this.isError = false
+						this.isError = false;
+						this.loading = true;
 					}
 				}
 			}
@@ -123,8 +128,11 @@
 		computed: {
 			wrapStyle() {
 				let style = {};
+				// 通过调用addUnit()方法，如果有单位，如百分比，px单位等，直接返回，如果是纯粹的数值，则加上rpx单位
+				style.width = this.$u.addUnit(this.width);
+				style.height = this.$u.addUnit(this.height);
 				// 如果是显示圆形，设置一个很多的半径值即可
-				style.borderRadius = this.shape == 'circle' ? '10000px' : this.$u.addUnit(this.radius)
+				style.borderRadius = this.shape == 'circle' ? '10000px' : uni.$u.addUnit(this.radius)
 				// 如果设置圆角，必须要有hidden，否则可能圆角无效
 				style.overflow = this.borderRadius > 0 ? 'hidden' : 'visible'
 				// if (this.fade) {
@@ -186,7 +194,7 @@
 	};
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 	@import '../../libs/css/components.scss';
 
 	$u-image-error-top:0px !default;
@@ -200,6 +208,11 @@
 	.u-image {
 		position: relative;
 		transition: opacity 0.5s ease-in-out;
+
+		&__image {
+			width: 100%;
+			height: 100%;
+		}
 
 		&__loading,
 		&__error {

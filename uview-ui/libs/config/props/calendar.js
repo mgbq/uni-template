@@ -35,6 +35,8 @@ export default {
         maxRange: Number.MAX_SAFE_INTEGER, // Infinity
         rangePrompt: '',
         showRangePrompt: true,
-        allowSameDay: false
+        allowSameDay: false,
+		round: 0,
+		monthNum: 3
     }
 }

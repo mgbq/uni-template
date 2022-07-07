@@ -15,8 +15,6 @@ export default {
 			},
 		})
 	},
-
-
 	/**
 	 * 打电话
 	 * @param {String<Number>} phoneNumber - 数字字符串
@@ -31,4 +29,21 @@ export default {
 		});
 	},
 
+	/**
+	 * @description 弹窗提示 showModal
+	 */
+	showModal(content, callback) {
+		uni.showModal({
+			title: '提示',
+			content: content,
+			showCancel: false,
+			success(res) {
+				if (res.confirm) {
+					if (typeof callback === 'function') {
+						callback();
+					}
+				} else if (res.cancel) {}
+			}
+		})
+	}
 }

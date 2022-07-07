@@ -23,6 +23,7 @@
 				v-if="mode === 'line'"
 				:style="[lineStyle]"
 			></view>
+			<view v-if="codeArray.length === index" :style="{backgroundColor: color}" class="u-code-input__item__cursor"></view>
 		</view>
 		<input
 			:disabled="disabledKeyboard"
@@ -58,6 +59,7 @@
 	 * @property {String | Number}	size				输入框的大小，宽等于高 （默认 35 ）
 	 * @property {Boolean}			disabledKeyboard	是否隐藏原生键盘，如果想用自定义键盘的话，需设置此参数为true （默认 false ）
 	 * @property {String}			borderColor			边框和线条颜色 （默认 '#c9cacc' ）
+	 * @property {Boolean}			disabledDot			是否禁止输入"."符号 （默认 true ）
 	 * 
 	 * @event {Function}	change	输入内容发生改变时触发，具体见上方说明			value：当前输入的值
 	 * @event {Function}	finish	输入字符个数达maxlength值时触发，见上方说明	value：当前输入的值
@@ -83,7 +85,7 @@
 		computed: {
 			// 根据长度，循环输入框的个数，因为头条小程序数值不能用于v-for
 			codeLength() {
-				return new Array(this.maxlength)
+				return new Array(Number(this.maxlength))
 			},
 			// 循环item的样式
 			itemStyle() {
@@ -144,6 +146,12 @@
 			inputHandler(e) {
 				const value = e.detail.value
 				this.inputValue = value
+				// 是否允许输入“.”符号
+				if(this.disabledDot) {
+					this.$nextTick(() => {
+						this.inputValue = value.replace('.', '')
+					})
+				}
 				// 未达到maxlength之前，发送change事件，达到后发送finish事件
 				this.$emit('change', value)
 				// 修改通过v-model双向绑定的值
@@ -157,8 +165,12 @@
 	}
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 	@import "../../libs/css/components.scss";
+	$u-code-input-cursor-width: 1px;
+	$u-code-input-cursor-height: 40%;
+	$u-code-input-cursor-animation-duration: 1s;
+	$u-code-input-cursor-animation-name: u-cursor-flicker;
 
 	.u-code-input {
 		@include flex;
@@ -169,6 +181,7 @@
 			@include flex;
 			justify-content: center;
 			align-items: center;
+			position: relative;
 
 			&__text {
 				font-size: 15px;
@@ -190,17 +203,38 @@
 				width: 40px;
 				background-color: $u-content-color;
 			}
+			&__cursor {
+				position: absolute;
+				top: 50%;
+				left: 50%;
+				transform: translate(-50%,-50%);
+				width: $u-code-input-cursor-width;
+				height: $u-code-input-cursor-height;
+				animation: $u-code-input-cursor-animation-duration u-cursor-flicker infinite;
+			}
 		}
 
 		&__input {
 			// 之所以需要input输入框，是因为有它才能唤起键盘
 			// 这里将它设置为两倍的屏幕宽度，再将左边的一半移出屏幕，为了不让用户看到输入的内容
 			position: absolute;
-			left: -150rpx;
+			left: -750rpx;
 			width: 1500rpx;
 			top: 0;
 			background-color: transparent;
 			text-align: left;
+		}
+	}
+	
+	@keyframes u-cursor-flicker {
+		0% {
+		    opacity: 0;
+		}
+		50% {
+		    opacity: 1;
+		}
+		100% {
+		    opacity: 0;
 		}
 	}
 </style>

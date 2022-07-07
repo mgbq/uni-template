@@ -78,7 +78,7 @@
 	};
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 	@import "../../libs/css/components.scss";
      $u-grid-width:100% !default;
 	.u-grid {
@@ -90,10 +90,8 @@
 		display: block;
 		/* #endif */
 		justify-content: center;
-		/* #ifndef MP */
 		@include flex;
 		flex-wrap: wrap;
 		align-items: center;
-		/* #endif */
 	}
 </style>

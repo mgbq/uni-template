@@ -11,7 +11,9 @@ export default {
             // 价格类型
             if (mode === 'price') {
                 // 如果text不为金额进行提示
-                !uni.$u.test.amount(text) && uni.$u.error('金额模式下，text参数需要为金额格式')
+                if (!/^\d+(\.\d+)?$/.test(text)) {
+                    uni.$u.error('金额模式下，text参数需要为金额格式');
+                }
                 // 进行格式化，判断用户传入的format参数为正则，或者函数，如果没有传入format，则使用默认的金额格式化处理
                 if (uni.$u.test.func(format)) {
                     // 如果用户传入的是函数，使用函数格式化
@@ -26,7 +28,7 @@ export default {
                 if (uni.$u.test.func(format)) {
                     // 如果用户传入的是函数，使用函数格式化
                     return format(text)
-                } if (this.formart) {
+                } if (format) {
                     // 如果format非正则，非函数，则使用默认的时间格式化方法进行操作
                     return uni.$u.timeFormat(text, format)
                 }
@@ -34,7 +36,7 @@ export default {
                 return uni.$u.timeFormat(text, 'yyyy-mm-dd')
             } if (mode === 'phone') {
                 // 判断是否合法的手机号
-                !uni.$u.test.mobile(text) && uni.$u.error('手机号模式下，text参数需要为手机号码格式')
+                // !uni.$u.test.mobile(text) && uni.$u.error('手机号模式下，text参数需要为手机号码格式')
                 if (uni.$u.test.func(format)) {
                     // 如果用户传入的是函数，使用函数格式化
                     return format(text)
@@ -51,8 +53,7 @@ export default {
                     return format(text)
                 } if (format === 'encrypt') {
                     // 如果format为encrypt，则将姓名进行星号加密处理
-                    // return text.replace(/(?<=.)./g, '*').substring(0, 3)
-                    return text
+                    return this.formatName(text)
                 }
                 return text
             } if (mode === 'link') {
@@ -61,6 +62,24 @@ export default {
                 return text
             }
             return text
+        }
+    },
+    methods: {
+        // 默认的姓名脱敏规则
+        formatName(name) {
+            let value = ''
+            if (name.length === 2) {
+                value = name.substr(0, 1) + '*'
+            } else if (name.length > 2) {
+                let char = ''
+                for (let i = 0, len = name.length - 2; i < len; i++) {
+                    char += '*'
+                }
+                value = name.substr(0, 1) + char + name.substr(-1, 1)
+            } else {
+                value = name
+            }
+            return value
         }
     }
 }
