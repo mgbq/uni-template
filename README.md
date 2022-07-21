@@ -160,19 +160,23 @@ B组件 触发($emit)
 
 ## 后面持续更新。。。。
 
-## 广告
-
-承接毕业设计网站小程序App开发，价格美丽 ，QQ 2214904953
 
 
-#### 作者相关文章
+## 牛云团队项目推荐
 
-[万能节日头像助手](https://nxmin.blog.csdn.net/article/details/124525217)
+[斗图，表情包小程序](https://ext.dcloud.net.cn/plugin?id=8806)
+
+[万能节日头像小程序](https://ext.dcloud.net.cn/plugin?id=8085)
+
+[智能垃圾分类小程序](https://ext.dcloud.net.cn/plugin?id=6711)
+
+[微信小程序支付unicloud版](https://ext.dcloud.net.cn/plugin?id=8185)
+
+[资源变现资讯、自媒体、新闻、博客小程序](https://ext.dcloud.net.cn/plugin?id=8548)
 
 [反编译获取任何微信小程序源码——看这篇就够了](https://blog.csdn.net/qq_32340877/article/details/110993362) 
 
-[资源变现资讯、新闻、自媒体、博客小程序（可引流，开通流量主，带pc后台管理）)](https://nxmin.blog.csdn.net/article/details/125260848)
-
+```承接各类软件开发业务价格美丽 ，QQ 2214904953```
 
 
 
